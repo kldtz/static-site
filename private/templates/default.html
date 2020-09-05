@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/css/default.css">
+    {{link}}
+    {{highlight}}
+    {{mathjax}}
+</head>
+
+<body>
+    <article>
+        <header>
+            <div><span class="date">{{date}}</span></div>
+            <h1>{{title}}</h1>
+        </header>
+        <div class="content">
+            {{content}}
+        </div>
+    </article>
+    <footer id="site-footer">
+        <nav id="footer-menu"><a href="/">Home</a> | <a href="/about">About</a></nav>
+        <p>&copy; 2018-2020 Tobias Kolditz</p>
+    </footer>
+    {{scripts}}
+</body>
+
+</html>
