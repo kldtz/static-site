@@ -10,6 +10,8 @@ Random writings about language, linguistics, math, programming and the like.
 
 ## 2020
 
+* [Transducing German cardinal numbers](/posts/transducing-german-cardinal-numbers)
+
 * [Finite state Optimality Theory: final obstruent devoicing](/posts/finite-state-optimality-theory-final-obstruent-devoicing)
 
 * [A minimalist static site generator](/posts/minimalist-static-site-generator)

@@ -77,7 +77,7 @@ The first template generates a simple substitution `(X)[Y]`. The second definiti
 
 * `[0:%[ ? 0:%]]*`: We have an arbitrary segment around which we insert square brackets. This pattern optionally repeats any number of times. 
 * `X .o. [0:%[ ? 0:%]]*`: Compose the previous transducer with an expression that is the parameter of the `Surf` template. So the output language is the output of `X` with each segment enclosed in square brackets.
-* `[X .o. [0:%[ ? 0:%]]*].l`: Extract the range of the previous transducer (the output or surface language). The automaton generated from this expression excepts a word `w` if an input exists for which `X .o. [0:%[ ? 0:%]]*` produces `w`.
+* `[X .o. [0:%[ ? 0:%]]*].l`: Extract the range of the previous transducer (the output or surface language). The automaton generated from this expression accepts a word `w` if an input exists for which `X .o. [0:%[ ? 0:%]]*` produces `w`.
 * `[ %( (S) %) | %[ %] ]`: Generate the language that consists of single segments enclosed in parentheses, empty parentheses and empty square brackets.
 * `[X .o. [0:%[ ? 0:%]]*].l / [ %( (S) %) | %[ %] ]`: The pattern after the slash is optionally interspersed at any place any number of times within each word of the language described by the first pattern. If we use this pattern to recognize words, we can say that the pattern after the slash is ignored. For example: `a+/b` is equivalent to `b*a+[a|b]*`, or `a+` after removing all instances of `b`. 
 
