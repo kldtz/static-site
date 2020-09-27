@@ -3,9 +3,9 @@ SHELL:=/bin/bash
 MD_FILES = $(shell find private/content/ -type f -name '*.md')
 HTML_FILES = $(patsubst private/content/%.md, public/%.html, $(MD_FILES))
 
-.PHONY: all sync-static deploy clean
+.PHONY: all sync-static deploy clean dev
 
-all: sync-static $(HTML_FILES) deploy
+all: sync-static $(HTML_FILES) #deploy
 
 sync-static:
 	# We cannot sync the whole private dir with the delete flag
@@ -21,6 +21,9 @@ public/%.html: private/content/%.md
 
 deploy:
 	rsync -r public/ /var/www/html/ --delete
+
+dev:
+	cd public && browser-sync start --server --files .
 
 clean:
 	rm -rf public/!(.git)
