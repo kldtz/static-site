@@ -10,9 +10,9 @@ After two posts on FSTs, this text deals with another piece of old (or *classic*
 By the most simple definition, a collocation is a sequence of words that occur together more often then expected by chance. For a bigram $w_1 w_2$, we can formalize this using conditional probabilities as $P(w_1) P(w_2|w_1) > P(w_1) P(w_2)$, or simply $P(w_2|w_1) > P(w_2)$. We can estimate the probabilties from a corpus by counting unigram and bigram types: 
 
 <div>$$
-P(w_1) = \frac{C(w_1)}{N}\\
-P(w_2) = \frac{C(w_2)}{N}\\
-P(w_2|w_1) = \frac{C(w_1, w_2)}{C(w_1)}
+P(w_1) = \frac{C(w_1)}{N}, \quad
+P(w_2) = \frac{C(w_2)}{N}, \quad
+P(w_2|w_1) = \frac{C(w_1, w_2)}{C(w_1)},
 $$</div>
 
 where $C(...)$ is a count from our corpus and $N$ is the number of unigrams/bigrams in the corpus<a name="fn-1"></a><sup>[1](#1)</sup>. However, if we want to use these probabilities to find collocations in a corpus, we face two problems:
@@ -25,7 +25,7 @@ The first problem is a question of statistical significance, so an obvious idea 
 
 ## Hypothesis Testing
 
-Before picking a test statistic, we need to think about the distribution we are dealing with. We can view a text as a sequence of *N* (overlapping) bigrams. For a given bigram $b = (w_1, w_2)$, each bigram in this sequence either equals *b* (1) or not (0). In other words, we have *N* binary random variables. Assuming independence between these random variables and identical distribution<a name="fn-2"></a><sup>[2](#2)</sup>, we can model text as a **Bernoulli process**, a sequence of independent Bernoulli trials. The number of successes (bigram equals *b*) in these N trials has a **binomial distribution**. The probability mass function (PMF) for the binomial distribution is defined as
+Before picking a test statistic, we need to think about the distribution we are dealing with. We can view a text as a sequence of *N* (overlapping) bigrams. For a given bigram $b = (w_1, w_2)$, each bigram in this sequence either equals *b* (1) or not (0). In other words, we have *N* binary random variables. Assuming independence between these random variables and identical distribution<a name="fn-2"></a><sup>[2](#2)</sup>, we can model text as a *Bernoulli process*, a sequence of independent Bernoulli trials. The number of successes (bigram equals *b*) in these N trials has a binomial distribution. The probability mass function (PMF) for the binomial distribution is defined as
 
 <div>$$
 b(k; n, p) = {n \choose k} p^k (1-p)^{n-k}
@@ -35,11 +35,11 @@ where $n \in \mathbb{N}$ is the number of trials ($N$ bigrams), $k$ (nonnegative
 
 ### T-test
 
-According to the [De Moivre-Laplace theorem](https://en.wikipedia.org/wiki/De_Moivre%E2%80%93Laplace_theorem), the normal distribution can be used to approximate the binomial distribution for large enough $n$ and/or $p$ not close to 0 or 1, more specifically, if $np (1-p) > 5$ ([Dunning, 1993](#dunning-1993)). Under this precondition, we could use a one-sample t-test to determine whether the population mean (the bigram probability estimated from our text sample, $P(w_1, w_2) = \frac{C(w_1, w_2)}{N}$) is significantly different (or larger if we use a one-sided test) from the mean we would expect given the null hypothesis (the product of the probabilties of the individual words, $H_0: P(w_1, w_2) = P(w_1) P(w_2)$). However, [we know](https://proceed-to-decode.com/posts/vocabulary-of-russian-news/) that the distribution of words in natural language follows Zipf's law, that is, a few words occur with very high frequency, while many words occurs just once or a few times, even in a large corpus. So in many cases $p$ will be close to zero and $np (1-p) < 1$, prohibiting the use of the t-test, which assumes a normal distribution.
+According to the [De Moivre-Laplace theorem](https://en.wikipedia.org/wiki/De_Moivre%E2%80%93Laplace_theorem), the normal distribution can be used to approximate the binomial distribution for large enough $n$ and/or $p$ not close to 0 or 1, more specifically, if $np (1-p) > 5$ ([Dunning, 1993](#dunning-1993)). Under this precondition, we could use a one-sample t-test to determine whether the population mean (the bigram probability estimated from our text sample, $P(w_1, w_2) = \frac{C(w_1, w_2)}{N}$) is significantly different (or larger if we use a one-sided test) from the mean we would expect given the null hypothesis (the product of the probabilties of the individual words, $H_0: P(w_1, w_2) = P(w_1) P(w_2)$). However, [we know](https://proceed-to-decode.com/posts/vocabulary-of-russian-news/) that the distribution of words in natural language follows *Zipf's law*, that is, a few words occur with very high frequency, while many words occur just once or a few times, even in a large corpus. So in many cases $p$ will be close to zero and $np (1-p) < 1$, prohibiting the use of the t-test, which assumes a normal distribution.
 
 ### Likelihood ratios
 
-[Dunning (1993)](#dunning-1993) proposed likelihood ratios as more appropriate test for collocations. His method does not require normally distributed data and produces more interpretable numbers than the t-test statistic. The computed statistic is asymptotically $\chi ^2$ distributed, so we can consult the same table as we do for Pearson's chi-squared test to determine confidence levels. Furthermore, the statistic is more appropriate for sparse data than Pearson's $X^2$.
+[Dunning (1993)](#dunning-1993) proposed *likelihood ratios* as more appropriate test for collocations. His method does not require normally distributed data and produces more interpretable numbers than the t-test statistic. The computed statistic is asymptotically $\chi ^2$ distributed, so we can consult the same table as we do for *Pearson's chi-squared* test to determine confidence levels. Furthermore, the statistic is more appropriate for sparse data than Pearson's $X^2$.
 
 
 We start by defining the hypotheses we want to test. I copy the definitions from [Manning and Schütze's (1999)](#manning-schütze-1999).
