@@ -210,14 +210,14 @@ Still it seems to me that linguists could profit from implementing their analyse
 
 <hr>
 
-<a name="1" href="#fn-1"><sup>1</sup></a> Based on the *matching* approach developed by [Gerdemann and Van Noord (2000)](#gerdemann-van-noord-2000).
+<a id="1" href="#fn-1"><sup>1</sup></a> Based on the *matching* approach developed by [Gerdemann and Van Noord (2000)](#gerdemann-van-noord-2000).
 
-<a name="2" href="#fn-2"><sup>2</sup></a> In general, violations do not necessarily line up. For these cases the authors introduce a violation-permuting transducer that needs to be applied the right number of times. However, this problem does not affect the devoicing analysis, so I ignore it here.
+<a id="2" href="#fn-2"><sup>2</sup></a> In general, violations do not necessarily line up. For these cases the authors introduce a violation-permuting transducer that needs to be applied the right number of times. However, this problem does not affect the devoicing analysis, so I ignore it here.
 
 <hr>
 
-<a name="gerdemann-hulden-2012"></a> Gerdemann, D., & Hulden, M. (2012). [Practical finite state optimality theory.](https://www.aclweb.org/anthology/W12-6202.pdf) In *Proceedings of the 10th International Workshop on Finite State Methods and Natural Language Processing* (pp. 10-19).
+<a id="gerdemann-hulden-2012"></a> Gerdemann, D., & Hulden, M. (2012). [Practical finite state optimality theory.](https://www.aclweb.org/anthology/W12-6202.pdf) In *Proceedings of the 10th International Workshop on Finite State Methods and Natural Language Processing* (pp. 10-19).
 
-<a name="gerdemann-van-noord-2000"></a> Gerdemann, D., & Van Noord, G. (2000). [Approximation and exactness in finite state optimality theory.](https://www.aclweb.org/anthology/W00-1804.pdf) In *Proceedings of the Fith Workshop of the ACL Special Interest Group in Computational Phonology* (pp. 34-45).
+<a id="gerdemann-van-noord-2000"></a> Gerdemann, D., & Van Noord, G. (2000). [Approximation and exactness in finite state optimality theory.](https://www.aclweb.org/anthology/W00-1804.pdf) In *Proceedings of the Fith Workshop of the ACL Special Interest Group in Computational Phonology* (pp. 34-45).
 
-<a name="hulden-2009"></a> Hulden, M. (2009). [Foma: a finite-state compiler and library.](https://www.aclweb.org/anthology/E09-2008.pdf) In *Proceedings of the Demonstrations Session at EACL 2009* (pp. 29-32).
+<a id="hulden-2009"></a> Hulden, M. (2009). [Foma: a finite-state compiler and library.](https://www.aclweb.org/anthology/E09-2008.pdf) In *Proceedings of the Demonstrations Session at EACL 2009* (pp. 29-32).

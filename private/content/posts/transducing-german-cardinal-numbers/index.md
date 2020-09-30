@@ -123,4 +123,4 @@ apply down> fünftausenddreiundzwanzig
 
 <hr>
 
-<a name="1" href="#fn-1"><sup>1</sup></a> Words of the *lower* or *second* projection of `Intermediate`, that is, words *o* for which an input *i* exists such that `Intermediate` maps *i* to *o*.
+<a id="1" href="#fn-1"><sup>1</sup></a> Words of the *lower* or *second* projection of `Intermediate`, that is, words *o* for which an input *i* exists such that `Intermediate` maps *i* to *o*.

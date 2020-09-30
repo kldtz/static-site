@@ -164,4 +164,4 @@ The plot shows similar accuracy distributions for both methods and reveals one b
 
 <hr>
 
-<a name="koehn-2005"></a>Philipp Koehn (2005). Europarl: A Parallel Corpus for Statistical Machine Translation, MT Summit 2005.
+<a id="koehn-2005"></a>Philipp Koehn (2005). Europarl: A Parallel Corpus for Statistical Machine Translation, MT Summit 2005.

@@ -39,14 +39,14 @@ In the example derivation above we randomly chose among all rules with the requi
 
 ## Configuration Graph
 
-We can state the parsing process above in terms of a graph search problem: The nodes of the graph are parser **configurations**<a name="fn-1"></a><sup>[1](#1)</sup> consisting of a sentential form and an index into the input. Since the matched symbols of a sentential form are just prefixes of the input string, a configuration can be reduced to its index and the unmatched part of the sentential form (aka the **prediction stack** from which we pop the first symbol as input to match/predict and to which we push the output of match/predict). At the beginning we have one configuration consisting of the start symbol and index 0. By matching or predicting, we explore all direct successors of a configuration. For the grammar above and the sentence *aabbab* we get the following graph:
+We can state the parsing process above in terms of a graph search problem: The nodes of the graph are parser **configurations**<a id="fn-1"></a><sup>[1](#1)</sup> consisting of a sentential form and an index into the input. Since the matched symbols of a sentential form are just prefixes of the input string, a configuration can be reduced to its index and the unmatched part of the sentential form (aka the **prediction stack** from which we pop the first symbol as input to match/predict and to which we push the output of match/predict). At the beginning we have one configuration consisting of the start symbol and index 0. By matching or predicting, we explore all direct successors of a configuration. For the grammar above and the sentence *aabbab* we get the following graph:
 
 <figure class="half-full">
 <svg id="static-graph" width="1000" height="600"></svg>
 <figcaption><p>Configuration graph for the string <em>aabbab</em>.</p></figcaption>
 </figure>
 
-Blue nodes are the result of predictions<a name="fn-2"></a><sup>[2](#2)</sup>, orange nodes come from matching. We see an alternating color pattern because our grammar is in Greibach normal form (each right-hand side starts with a terminal). Filled nodes are configurations that actually lead to a sentence, all other nodes lead to dead ends. Because our grammar doesn't have epsilon rules, each match result is an only child. Predictions, however, are siblings as our grammar provides more than one rule for each nonterminal.
+Blue nodes are the result of predictions<a id="fn-2"></a><sup>[2](#2)</sup>, orange nodes come from matching. We see an alternating color pattern because our grammar is in Greibach normal form (each right-hand side starts with a terminal). Filled nodes are configurations that actually lead to a sentence, all other nodes lead to dead ends. Because our grammar doesn't have epsilon rules, each match result is an only child. Predictions, however, are siblings as our grammar provides more than one rule for each nonterminal.
 
 There is one final configuration that covers the whole input sentence and has an empty prediction stack (6), which means that the parser recognized the input string as being in our language. Two different paths lead to this goal configuration, which tells us that the grammar is **ambiguous**. To construct the parse trees, we can simply start with the goal configuration set (in this case it has only one element) and follow the parents up to the root node.
 
@@ -67,11 +67,11 @@ When you click on one of the buttons, you can watch a DFS or BFS search on this 
 
 <hr>
 
-<a name="1" href="#fn-1"><sup>1</sup></a> I adopt the term *configuration* from Grune and Jacobs (2008, ch.&nbsp;6), but according to their definition, a configuration has an analysis stack instead of a simple index, which leads to more configurations (our example graph would be a [tree](config-tree.html)!).
+<a id="1" href="#fn-1"><sup>1</sup></a> I adopt the term *configuration* from Grune and Jacobs (2008, ch.&nbsp;6), but according to their definition, a configuration has an analysis stack instead of a simple index, which leads to more configurations (our example graph would be a [tree](config-tree.html)!).
 
-<a name="2" href="#fn-2"><sup>2</sup></a> You can think of the configuration *0:S* as the prediction result of a special rule *S' -> S*.
+<a id="2" href="#fn-2"><sup>2</sup></a> You can think of the configuration *0:S* as the prediction result of a special rule *S' -> S*.
 
-<a name="grune-jacobs-2008"></a>Grune, Dick, & Jacobs, Ceriel J. H. (2008). Parsing Techniques - A Practical Guide (2nd ed.). Monographs in Computer Science. New York: Springer.
+<a id="grune-jacobs-2008"></a>Grune, Dick, & Jacobs, Ceriel J. H. (2008). Parsing Techniques - A Practical Guide (2nd ed.). Monographs in Computer Science. New York: Springer.
 
 <script src="/lib/d3/d3.v4.min.js"></script>
 <script src="/lib/dagre/dagre-d3.min.js"></script>

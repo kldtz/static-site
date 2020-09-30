@@ -1,6 +1,7 @@
 ---
 title: "Identifying Bigram Collocations"
 date: 2020-09-27T10:11:59+02:00
+description: "Identifying bigram collocations via hypothesis testing."
 features:
     - MathJax
 ---
@@ -15,7 +16,7 @@ P(w_2) = \frac{C(w_2)}{N}, \quad
 P(w_2|w_1) = \frac{C(w_1, w_2)}{C(w_1)},
 $$</div>
 
-where $C(...)$ is a count from our corpus and $N$ is the number of unigrams/bigrams in the corpus<a name="fn-1"></a><sup>[1](#1)</sup>. However, if we want to use these probabilities to find collocations in a corpus, we face two problems:
+where $C(...)$ is a count from our corpus and $N$ is the number of unigrams/bigrams in the corpus<a id="fn-1"></a><sup>[1](#1)</sup>. However, if we want to use these probabilities to find collocations in a corpus, we face two problems:
 
 1. $P(w_2|w_1) > P(w_2)$ could hold by chance, especially if our corpus is small or if we are looking at infrequent pairs of words.
 2. Language is not random, so most sequences of words occur more often than we would expect by the frequency of their individual words. That is, our definition doesn't really capture what linguists understand under the term *collocation*.
@@ -25,7 +26,7 @@ The first problem is a question of statistical significance, so an obvious idea 
 
 ## Hypothesis Testing
 
-Before picking a test statistic, we need to think about the distribution we are dealing with. We can view a text as a sequence of *N* (overlapping) bigrams. For a given bigram $b = (w_1, w_2)$, each bigram in this sequence either equals *b* (1) or not (0). In other words, we have *N* binary random variables. Assuming independence between these random variables and identical distribution<a name="fn-2"></a><sup>[2](#2)</sup>, we can model text as a *Bernoulli process*, a sequence of independent Bernoulli trials. The number of successes (bigram equals *b*) in these N trials has a binomial distribution. The probability mass function (PMF) for the binomial distribution is defined as
+Before picking a test statistic, we need to think about the distribution we are dealing with. We can view a text as a sequence of *N* (overlapping) bigrams. For a given bigram $b = (w_1, w_2)$, each bigram in this sequence either equals *b* (1) or not (0). In other words, we have *N* binary random variables. Assuming independence between these random variables and identical distribution<a id="fn-2"></a><sup>[2](#2)</sup>, we can model text as a *Bernoulli process*, a sequence of independent Bernoulli trials. The number of successes (bigram equals *b*) in these N trials has a binomial distribution. The probability mass function (PMF) for the binomial distribution is defined as
 
 <div>$$
 b(k; n, p) = {n \choose k} p^k (1-p)^{n-k}
@@ -77,18 +78,18 @@ Besides the obvious applications in lexicography (identifying proper nouns, extr
 
 <hr>
 
-<a name="1" href="#fn-1"><sup>1</sup></a> For the sake of simplicity, we assume the same number of unigrams and bigrams *N*.
+<a id="1" href="#fn-1"><sup>1</sup></a> For the sake of simplicity, we assume the same number of unigrams and bigrams *N*.
 
-<a name="2" href="#fn-2"><sup>2</sup></a> This is a naive assumption that obviously cannot be true. All models are wrong, but some are useful, as they say.
+<a id="2" href="#fn-2"><sup>2</sup></a> This is a naive assumption that obviously cannot be true. All models are wrong, but some are useful, as they say.
 
 <hr>
 
-<a name="dunning-1993"></a> Dunning, T. E. (1993). Accurate methods for the statistics of surprise and coincidence. *Computational linguistics*, 19(1), 61-74.
+<a id="dunning-1993"></a> Dunning, T. E. (1993). Accurate methods for the statistics of surprise and coincidence. *Computational linguistics*, 19(1), 61-74.
 
-<a name="kiss-strunk-2002"></a>Kiss, T., & Strunk, J. (2002). Viewing sentence boundary detection as collocation identification. In *Proceedings of KONVENS* (Vol. 2002, pp. 75-82).
+<a id="kiss-strunk-2002"></a>Kiss, T., & Strunk, J. (2002). Viewing sentence boundary detection as collocation identification. In *Proceedings of KONVENS* (Vol. 2002, pp. 75-82).
 
-<a name="kiss-strunk-2006"></a>Kiss, T., & Strunk, J. (2006). Unsupervised multilingual sentence boundary detection. *Computational linguistics*, 32(4), 485-525.
+<a id="kiss-strunk-2006"></a>Kiss, T., & Strunk, J. (2006). Unsupervised multilingual sentence boundary detection. *Computational linguistics*, 32(4), 485-525.
 
-<a name="manning-schütze-1999"></a>Manning, C., & Schütze, H. (1999). Foundations of statistical natural language processing. MIT press.
+<a id="manning-schütze-1999"></a>Manning, C., & Schütze, H. (1999). Foundations of statistical natural language processing. MIT press.
 
-<a name="sanchez-2019"></a> Sanchez, G. (2019). Sentence boundary detection in legal text. In *Proceedings of the Natural Legal Language Processing Workshop 2019* (pp. 31-38).
+<a id="sanchez-2019"></a> Sanchez, G. (2019). Sentence boundary detection in legal text. In *Proceedings of the Natural Legal Language Processing Workshop 2019* (pp. 31-38).

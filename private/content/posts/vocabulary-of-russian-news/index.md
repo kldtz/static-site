@@ -15,7 +15,7 @@ The data which all frequency counts in this post are based on are taken from the
 
 What is a word? When people talk about different 'words' in the context of natural language processing (NLP), they usually mean **tokens** (strings of characters delimited by white space and sometimes punctuation), or **token types** (distinct tokens). In the context of language learning, knowing a 'word' usually means knowing a **lexeme**, a unit of lexical meaning often represented by a **lemma** (aka canonical/citation/dictionary form, headword). Inflected forms of a lexeme are called **word-forms**. 
 
-Here is a brief example: For the (rather nonsensical) string *"Peter walks, I walk, people walk"* our tokenizer (which ignores punctuation) gives us the following list of six tokens: *Peter, walks, I, walk, people, walk*. Since *walk* appears twice, this list contains only five token types and five different word-forms<a name="fn-1"></a><sup>[1](#1)</sup>. Both *walk* and *walks* belong to the same lexeme, which is represented by the lemma *walk* (under which we could find it in a dictionary of English), so we have four different lexemes.
+Here is a brief example: For the (rather nonsensical) string *"Peter walks, I walk, people walk"* our tokenizer (which ignores punctuation) gives us the following list of six tokens: *Peter, walks, I, walk, people, walk*. Since *walk* appears twice, this list contains only five token types and five different word-forms<a id="fn-1"></a><sup>[1](#1)</sup>. Both *walk* and *walks* belong to the same lexeme, which is represented by the lemma *walk* (under which we could find it in a dictionary of English), so we have four different lexemes.
 
 In a [synthetic language](https://en.wikipedia.org/wiki/Synthetic_language) like Russian, often a larger set of word-forms belongs to a single lexeme. Given some knowledge about Russian morphology, knowing the lemma in most cases is enough to understand all inflected forms. Thus instead of counting types, we should count lexemes or lemmas to get a good estimate of the number of words we need to know to read Russian news articles.
 
@@ -52,7 +52,7 @@ We see that these ten lemmas alone cover almost 16% of all tokens in the corpus 
         </figcaption>
 </figure>
 
-The empirical relation between absolute frequency and rank in this log-log plot (blue) can be approximated<a name="fn-2"></a><sup>[2](#2)</sup> by a straight line with negative slope (orange), which shows that frequency and rank are inversely proportional<a name="fn-3"></a><sup>[3](#3)</sup>. We have a few words with very high frequency and a long tail of words with low frequencies. This phenomenon is known as one of several incarnations of **Zipf's law**, which for word frequencies can be stated simply<a name="fn-4"></a><sup>[4](#4)</sup> as
+The empirical relation between absolute frequency and rank in this log-log plot (blue) can be approximated<a id="fn-2"></a><sup>[2](#2)</sup> by a straight line with negative slope (orange), which shows that frequency and rank are inversely proportional<a id="fn-3"></a><sup>[3](#3)</sup>. We have a few words with very high frequency and a long tail of words with low frequencies. This phenomenon is known as one of several incarnations of **Zipf's law**, which for word frequencies can be stated simply<a id="fn-4"></a><sup>[4](#4)</sup> as
 
 <div>
 $$f(r) = Cr^{-1} $$
@@ -62,7 +62,7 @@ where $r$ is the frequency rank, `$f(r)$` is the absolute frequency of the lemma
 
 ### Estimating the Necessary Passive Vocabulary
 
-Based on Fig. 1 we can expect to cover a large share of tokens with only a small number of highly frequent lemmas. To see how our text understanding (or at least token coverage<a name="fn-5"></a><sup>[5](#5)</sup>) varies as a function of the number of most frequent words we know, let's have a look at the cumulative relative frequencies of the 10,000 most frequent lemmas:
+Based on Fig. 1 we can expect to cover a large share of tokens with only a small number of highly frequent lemmas. To see how our text understanding (or at least token coverage<a id="fn-5"></a><sup>[5](#5)</sup>) varies as a function of the number of most frequent words we know, let's have a look at the cumulative relative frequencies of the 10,000 most frequent lemmas:
 
 <figure class="middle">
     <img src="/img/cumulative-relative-freq.png"
@@ -100,24 +100,24 @@ Finally, the corpus used for this analysis is quite large and heterogeneous. Peo
 
 <hr>
 
-<a name="1" href="#fn-1"><sup>1</sup></a> Note that the concept of *token types* comes from natural language processing and is not identical with the linguistic concept of *word-forms*. If our tokenizer would split on whitespace only, punctuation characters would be considered tokens, but not word-forms. Similarly, in the case of missing spaces, several adjacent word-forms may become one token.
+<a id="1" href="#fn-1"><sup>1</sup></a> Note that the concept of *token types* comes from natural language processing and is not identical with the linguistic concept of *word-forms*. If our tokenizer would split on whitespace only, punctuation characters would be considered tokens, but not word-forms. Similarly, in the case of missing spaces, several adjacent word-forms may become one token.
 
-<a name="2" href="#fn-2"><sup>2</sup></a> Because frequency and rank are estimated on the same corpus, the empirical distribution might seem more regular than it actually is due to correlated errors [(Piantadosi, 2014)](#piantadosi-2014). However, for our purposes this error is negligible.
+<a id="2" href="#fn-2"><sup>2</sup></a> Because frequency and rank are estimated on the same corpus, the empirical distribution might seem more regular than it actually is due to correlated errors [(Piantadosi, 2014)](#piantadosi-2014). However, for our purposes this error is negligible.
 
-<a name="3" href="#fn-3"><sup>3</sup></a> This relationship only appears linear in a log-log plot: `$\log(\frac{C}{r}) = - \log(r) + \log(C)$`.
+<a id="3" href="#fn-3"><sup>3</sup></a> This relationship only appears linear in a log-log plot: `$\log(\frac{C}{r}) = - \log(r) + \log(C)$`.
 
-<a name="4" href="#fn-4"><sup>4</sup></a> A more general version of this power law was proposed by [Mandelbrot (1953)](#mandelbrot-1953): `$f(r) = C (r + a)^{-b}$` where `$a$` and `$b$` are constants (in our case `$a=0$` and `$b=1$`).
+<a id="4" href="#fn-4"><sup>4</sup></a> A more general version of this power law was proposed by [Mandelbrot (1953)](#mandelbrot-1953): `$f(r) = C (r + a)^{-b}$` where `$a$` and `$b$` are constants (in our case `$a=0$` and `$b=1$`).
 
-<a name="5" href="#fn-5"><sup>5</sup></a> There seems to be a linear relationship between the percentage of known words and reading comprehension, but it's not the only factor, see [Schmitt et al. (2011)](#schmitt-2011).
+<a id="5" href="#fn-5"><sup>5</sup></a> There seems to be a linear relationship between the percentage of known words and reading comprehension, but it's not the only factor, see [Schmitt et al. (2011)](#schmitt-2011).
 
 <hr>
 
-<a name="mandelbrot-1953"></a> Mandelbrot, B. (1953). An informational theory of the statistical structure of language. Communication theory, 84, 486-502.
+<a id="mandelbrot-1953"></a> Mandelbrot, B. (1953). An informational theory of the statistical structure of language. Communication theory, 84, 486-502.
 
-<a name="newmeyer-2009"></a> Newmeyer, F. (2009). Current challenges to the lexicalist hypothesis. Time and again: Theoretical perspectives on formal linguistics, 91-117.
+<a id="newmeyer-2009"></a> Newmeyer, F. (2009). Current challenges to the lexicalist hypothesis. Time and again: Theoretical perspectives on formal linguistics, 91-117.
 
-<a name="piantadosi-2014"></a> Piantadosi, S. T. (2014). Zipf’s word frequency law in natural language: A critical review and future directions. Psychonomic bulletin & review, 21(5), 1112-1130.
+<a id="piantadosi-2014"></a> Piantadosi, S. T. (2014). Zipf’s word frequency law in natural language: A critical review and future directions. Psychonomic bulletin & review, 21(5), 1112-1130.
 
-<a name="schmitt-2011"></a> Schmitt, N., Jiang, X., & Grabe, W. (2011). The percentage of words known in a text and reading comprehension. The Modern Language Journal, 95(1), 26-43.
+<a id="schmitt-2011"></a> Schmitt, N., Jiang, X., & Grabe, W. (2011). The percentage of words known in a text and reading comprehension. The Modern Language Journal, 95(1), 26-43.
 
-<a name="zipf-1949"></a> Zipf, G. K. (1949). Human behavior and the principle of least effort: An introduction to human ecology. Cambridge, MA: Addison-Wesley.
+<a id="zipf-1949"></a> Zipf, G. K. (1949). Human behavior and the principle of least effort: An introduction to human ecology. Cambridge, MA: Addison-Wesley.

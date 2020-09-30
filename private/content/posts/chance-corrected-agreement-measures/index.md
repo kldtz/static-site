@@ -37,7 +37,7 @@ The coincidence matrix $B$ is a symmetric version of $A$, where $b_{ij}$ gives u
 
 Since $A$ is asymmetric, there is no simple way of generalizing it to multiple raters. 
 
-To generalize $B$, we can define it as the sum of the coincidence matrices between all 2-combinations of annotators normalized by $r-1$.<a name="fn-1"></a><sup>[1](#1)</sup> Each coincidence matrix between two annotators contributes $2u$ ratings, thus after multiplication with the binomial coefficient and normalization we arrive at the number of labels assigned by all annotators ($ru$). 
+To generalize $B$, we can define it as the sum of the coincidence matrices between all 2-combinations of annotators normalized by $r-1$.<a id="fn-1"></a><sup>[1](#1)</sup> Each coincidence matrix between two annotators contributes $2u$ ratings, thus after multiplication with the binomial coefficient and normalization we arrive at the number of labels assigned by all annotators ($ru$). 
 
 <div>$$
 n_B = \sum_{i=1}^c \sum_{j=1}^c b_{ij} = \frac{1}{r-1}{r \choose 2} 2u = ru
@@ -88,7 +88,7 @@ The observed agreement of Fleiss' Kappa $\kappa_F$ ([Fleiss, 1971](#fleiss-1971)
 p_o = \frac{tr(B)}{n_B}
 $$</div>
 
-To obtain the chance agreement for the $i$th category, we calculate the square of the proportion of all assignments to the $i$th category. The sum over the chance agreement for all $c$ categories gives us $p_e$.<a name="fn-2"></a><sup>[2](#2)</sup>
+To obtain the chance agreement for the $i$th category, we calculate the square of the proportion of all assignments to the $i$th category. The sum over the chance agreement for all $c$ categories gives us $p_e$.<a id="fn-2"></a><sup>[2](#2)</sup>
 
 <div>$$
 p_e = \sum_{i=1}^c \left( \frac{b_{i \cdot}}{n_B} \right)^2 = \frac{1}{n^2_B} \sum_{i=1}^c \left( b_{i \cdot} \right)^2
@@ -127,24 +127,24 @@ All three measures compute expected agreement based purely on 'chance' given the
 
 <hr>
 
-<a name="1" href="#fn-1"><sup>1</sup></a> Here I use the definition of Krippendorff (2004, p. 231). He normalizes by the number of ratings per unit, but since we deal with a fixed number $r$ of ratings, this is equivalent.
+<a id="1" href="#fn-1"><sup>1</sup></a> Here I use the definition of Krippendorff (2004, p. 231). He normalizes by the number of ratings per unit, but since we deal with a fixed number $r$ of ratings, this is equivalent.
 
-<a name="2" href="#fn-2"><sup>2</sup></a> Fleiss (1971) defines `$p_o = \frac{1}{u} \sum_{i=1}^u \frac{1}{r(r-1)} \sum_{j=1}^c n_{ij} (n_{ij} - 1)$` and `$p_e = \sum_{j=1}^c \left( \frac{1}{ur} \sum_{i=1}^u n_{ij} \right)^2$`, where $n_{ij}$ denotes the number of raters who assigned the $i$th unit to the $j$th category. It's easy to show that these definitions are equivalent to the ones given above (`$\frac{1}{r-1} \sum_{i=1}^u n_{ij} (n_{ij} - 1) = b_{jj}$` and `$\sum_{i=1}^u n_{ij} = b_{j \cdot} = b_{\cdot j}$`).
+<a id="2" href="#fn-2"><sup>2</sup></a> Fleiss (1971) defines `$p_o = \frac{1}{u} \sum_{i=1}^u \frac{1}{r(r-1)} \sum_{j=1}^c n_{ij} (n_{ij} - 1)$` and `$p_e = \sum_{j=1}^c \left( \frac{1}{ur} \sum_{i=1}^u n_{ij} \right)^2$`, where $n_{ij}$ denotes the number of raters who assigned the $i$th unit to the $j$th category. It's easy to show that these definitions are equivalent to the ones given above (`$\frac{1}{r-1} \sum_{i=1}^u n_{ij} (n_{ij} - 1) = b_{jj}$` and `$\sum_{i=1}^u n_{ij} = b_{j \cdot} = b_{\cdot j}$`).
 
 <hr>
 
-<a name="brennan-prediger-1981"></a> Brennan, Robert L., & Prediger, Dale J. (1981). Coefficient kappa: Some uses, misuses, and alternatives. Educational and Psychological Measurement, 41, 687-699.
+<a id="brennan-prediger-1981"></a> Brennan, Robert L., & Prediger, Dale J. (1981). Coefficient kappa: Some uses, misuses, and alternatives. Educational and Psychological Measurement, 41, 687-699.
 
-<a name="byrt-et-al-1993"></a> Byrt, T., Bishop, J., & Carlin, J. B. (1993). Bias, prevalence and kappa. Journal of clinical epidemiology, 46(5), 423-429.
+<a id="byrt-et-al-1993"></a> Byrt, T., Bishop, J., & Carlin, J. B. (1993). Bias, prevalence and kappa. Journal of clinical epidemiology, 46(5), 423-429.
 
-<a name="cohen-1960"></a> Cohen, J. (1960). A coeffcient of agreement for nominal scales. Educational and psychological measurement, 20(1):37-46.
+<a id="cohen-1960"></a> Cohen, J. (1960). A coeffcient of agreement for nominal scales. Educational and psychological measurement, 20(1):37-46.
 
-<a name="feinstein-1990"></a> Feinstein, A.R, Cicchetti, D.V. (1990). High agreement but low kappa: I. The problems of two paradoxes. Journal of Clinical Epidemiology; 43: 543-548.
+<a id="feinstein-1990"></a> Feinstein, A.R, Cicchetti, D.V. (1990). High agreement but low kappa: I. The problems of two paradoxes. Journal of Clinical Epidemiology; 43: 543-548.
 
-<a name="fleiss-1971"></a>Fleiss, J. L. (1971). Measuring nominal scale agreement among many raters. Psychological
+<a id="fleiss-1971"></a>Fleiss, J. L. (1971). Measuring nominal scale agreement among many raters. Psychological
 bulletin, 76(5):378.
 
-<a name="krippendorff-2004"></a> Krippendorff, K. (2004). Content Analysis, An introduction to its methodology. 2nd Edition. Thousand Oaks, CA: Sage Publications.
+<a id="krippendorff-2004"></a> Krippendorff, K. (2004). Content Analysis, An introduction to its methodology. 2nd Edition. Thousand Oaks, CA: Sage Publications.
 
-<a name="scott-1955"></a> Scott, W. A. (1955). Reliability of content analysis: The case of nominal scale coding.
+<a id="scott-1955"></a> Scott, W. A. (1955). Reliability of content analysis: The case of nominal scale coding.
 Public Opinion Quarterly, 19, 321-325.
