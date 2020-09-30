@@ -115,13 +115,13 @@ fn generate_html(page: Page) -> String {
 
     // Generate link elements
     let link = match page.config.link {
-        Some(link) => link.iter().map(|l| format!("<link rel=\"stylesheet\" href=\"{}\" />", l)).collect::<Vec<String>>().join("\n"),
+        Some(link) => link.iter().map(|l| format!("<link rel=\"stylesheet\" href=\"{}\">", l)).collect::<Vec<String>>().join("\n"),
         _ => String::from(""),
     };
 
     // Generate meta description
     let description = match page.config.description {
-        Some(description) => format!("<meta name=\"description\" content=\"{}\" />", description),
+        Some(description) => format!("<meta name=\"description\" content=\"{}\">", description),
         _ => String::from(""),
     };
 
