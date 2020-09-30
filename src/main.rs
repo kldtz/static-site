@@ -49,6 +49,7 @@ impl Page {
 struct Config {
     title: String,
     date: DateTime<Utc>,
+    description: Option<String>,
     template: Option<String>,
     features: Option<Vec<Feature>>,
     scripts: Option<Vec<String>>,
@@ -96,7 +97,7 @@ fn generate_html(page: Page) -> String {
     let mathjax = if needs_feature!(&page, Feature::MathJax) {
         fs::read_to_string("private/snips/mathjax.html").unwrap()
     } else {
-        "".to_string()
+        String::from("")
     };
 
     // Load highlight snippet if requested
@@ -114,8 +115,14 @@ fn generate_html(page: Page) -> String {
 
     // Generate link elements
     let link = match page.config.link {
-        Some(link) => link.iter().map(|l| format!("<link rel=\"stylesheet\" href=\"{}\">", l)).collect::<Vec<String>>().join("\n"),
-        _ => "".to_string(),
+        Some(link) => link.iter().map(|l| format!("<link rel=\"stylesheet\" href=\"{}\" />", l)).collect::<Vec<String>>().join("\n"),
+        _ => String::from(""),
+    };
+
+    // Generate meta description
+    let description = match page.config.description {
+        Some(description) => format!("<meta name=\"description\" content=\"{}\" />", description),
+        _ => String::from(""),
     };
 
     // Convert markdown to HTML
@@ -138,6 +145,7 @@ fn generate_html(page: Page) -> String {
         let replacement = match &match_str[2..match_str.len() - 2] {
             "title" => &page.config.title,
             "date" => &date,
+            "description" => &description,
             "content" => &content,
             "highlight" => &highlight,
             "mathjax" => &mathjax,
