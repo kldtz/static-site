@@ -1,6 +1,7 @@
 ---
 title: "The Dropout Learning Algorithm: Math Review"
 date: 2020-03-14T09:20:45+01:00
+description: "Stochastic functions and some combinatorics for Baldi and Sadowski (2014)."
 features: 
        - MathJax
 ---

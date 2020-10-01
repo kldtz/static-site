@@ -1,6 +1,7 @@
 ---
 title: "F1 Score as a Measure of Set Similarity"
 date: 2019-03-26T18:17:46+01:00
+description: "F1 score defined in terms of two sets (Dice coefficient)."
 features:
     - MathJax
 ---

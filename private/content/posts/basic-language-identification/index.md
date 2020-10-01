@@ -1,6 +1,7 @@
 ---
 title: "Basic Language Identification"
 date: 2018-10-27T10:15:09+02:00
+description: "Most frequent words vs. character frequencies for language identification."
 features:
     - Highlight
 ---

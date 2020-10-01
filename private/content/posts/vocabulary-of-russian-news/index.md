@@ -1,6 +1,7 @@
 ---
 title: "How Many Words Do You Need to Know to Understand Russian News?"
 date: 2018-12-30T17:45:21+01:00
+description: "Lexical frequency analysis on a corpus of Russian news articles. To cover 90% of all tokens, we need around 7,000 different lexemes."
 features:
   - MathJax
 ---

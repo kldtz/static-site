@@ -1,6 +1,7 @@
 ---
 title: "A Minimalist Static Site Generator"
 date: 2020-08-25T10:00:00+02:00
+description: "Switching from Hugo to self-hacked solution for generating this static site."
 ---
 
 So far I have been using [Hugo](https://gohugo.io/) with a customized version of the [Hermit](https://github.com/Track3/hermit) theme to generate this site. This worked well and looked nice. However, Hugo is a relatively complex framework that keeps evolving (occasionally breaking stuff on updates) and the theme consists of a lot of files with styles, templates and scripts that I needed to maintain by myself since I customized them (in a not so clean way). Overall it felt like overkill for my purposes and being on vacation, I hacked together [my own minimalist site generator](https://github.com/kldtz/static-site) that suits my needs.

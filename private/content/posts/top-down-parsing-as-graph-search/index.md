@@ -1,6 +1,7 @@
 ---
 title: "Top-Down Parsing as Graph Search"
 date: 2018-09-30T16:35:56+02:00
+description: "Visualization of top-down parsing as graph search with D3 and dagre."
 link:
   - "/css/graph.css"
 ---

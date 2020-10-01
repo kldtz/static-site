@@ -1,6 +1,7 @@
 ---
 title: "Chance-Corrected Agreement Measures for a Fixed Number of Units"
 date: 2019-11-07T19:38:14+02:00
+description: "Comparison of inter-rater agreement measures for a fixed number of nominal ratings on a fixed number of units."
 features:
     - MathJax
 ---

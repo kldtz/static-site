@@ -1,7 +1,7 @@
 ---
 title: "Identifying Bigram Collocations"
 date: 2020-09-27T10:11:59+02:00
-description: "Identifying bigram collocations via hypothesis testing."
+description: "Review of identifying collocations via hypothesis testing."
 features:
     - MathJax
 ---
