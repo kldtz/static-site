@@ -1,12 +1,13 @@
 //! Quick and dirty script for generating HTML from Markdown file.
-
-use chrono::{DateTime, Utc};
 use pulldown_cmark::{html, Options, Parser};
 use regex::Regex;
-use serde::Deserialize;
 use std::env;
 use std::fs;
 
+mod page;
+use crate::page::{Page, Feature};
+mod rss;
+use crate::rss::{generate_feed};
 
 macro_rules! needs_feature {
     ($page: expr, $feature: pat) => {
@@ -20,68 +21,25 @@ macro_rules! needs_feature {
     }
 }
 
-/// Config read from YAML header and Markdown content.
-struct Page {
-    config: Config,
-    content: String,
-}
-
-impl Page {
-    fn new(path: &str) -> Page {
-        let content = fs::read_to_string(path).unwrap();
-
-        // Extract and parse yaml header
-        let mut iter = content.match_indices("---");
-        let (start, _) = iter.next().unwrap();
-        let (end, _) = iter.next().unwrap();
-
-        let yaml = &content[start + 3..end];
-        let config: Config = serde_yaml::from_str(&yaml).unwrap();
-        // Extract markdown content
-        let content = (&content[end + 3..]).to_string();
-
-        Page { config, content }
-    }
-}
-
-/// Metadata for page generation.
-#[derive(Deserialize, Debug)]
-struct Config {
-    title: String,
-    date: DateTime<Utc>,
-    description: Option<String>,
-    template: Option<String>,
-    features: Option<Vec<Feature>>,
-    scripts: Option<Vec<String>>,
-    link: Option<Vec<String>>,
-}
-
-/// Optional features used by the page.
-#[derive(Deserialize, Debug)]
-enum Feature {
-    MathJax,
-    Highlight,
-}
-
-impl Page {
-    fn template_name(&self) -> &str {
-        match &self.config.template {
-            Some(name) => name,
-            _ => "default",
-        }
-    }
-}
-
 fn main() {
     let args: Vec<String> = env::args().collect();
-    if args.len() != 2 {
-        panic!("Wrong number of arguments!");
+    if args.len() < 2 {
+        panic!("Too few arguments!");
     }
-
-    let md = &args[1];
-    let page = Page::new(md);
-    let html = generate_html(page);
-    println!("{}", html);
+    let command = &args[1];
+    if command == "feed" {
+        generate_feed();
+    } else if command == "page" {
+        if args.len() < 3 {
+            panic!("Missing Markdown path argument!");
+        }
+        let md = &args[2];
+        let page = Page::new(md);
+        let html = generate_html(page);
+        println!("{}", html);
+    } else {
+        panic!("Unknown command '{}'!", command);
+    }
 }
 
 /// Generates HTML from Page struct.

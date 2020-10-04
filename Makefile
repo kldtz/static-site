@@ -3,7 +3,7 @@ SHELL:=/bin/bash
 MD_FILES = $(shell find private/content/ -type f -name '*.md')
 HTML_FILES = $(patsubst private/content/%.md, public/%.html, $(MD_FILES))
 
-.PHONY: all sync-static deploy clean dev
+.PHONY: all sync-static deploy clean dev feed
 
 all: sync-static $(HTML_FILES) #deploy
 
@@ -17,7 +17,7 @@ sync-static:
 public/%.html: private/content/%.md
 	mkdir -p "$(@D)"
 	# Use the latest script (compile if necessary)
-	cargo run --release "$<" > "$@"
+	cargo run --release page "$<" > "$@"
 
 deploy:
 	rsync -r public/ /var/www/html/ --delete
@@ -27,3 +27,6 @@ dev:
 
 clean:
 	rm -rf public/!(.git)
+
+feed:
+	cargo run --release feed > public/rss.xml
