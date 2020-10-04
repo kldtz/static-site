@@ -1,7 +1,7 @@
 ---
 title: "Learning Russian by Reading"
 date: 2018-10-03T10:07:52+02:00
-description: "Introduction of Chrome extension 'Read Russian' for translating and learning Russian vocabulary."
+description: "Introducing my Chrome extension 'Read Russian' for translating and learning Russian vocabulary."
 ---
 
 I like picking up words and grammatical skills while reading texts in a new language. Since I'm learning Russian at the moment, I developed a little Chrome extension that supports this style of learning for the Russian language. The extension is available at the [Chrome Web Store](https://chrome.google.com/webstore/detail/read-russian/bfiedbggkbnefgngmdkhofddgpfjahcd).

@@ -1,7 +1,7 @@
 ---
 title: "Finite State Optimality Theory: Final Obstruent Devoicing"
 date: 2020-08-28T07:08:07+02:00
-description: "Annotated walkthrough of finite state Optimality Theory implementation for word-final obstruent devoicing by Gerdemann and Hulden (2012)."
+description: "Annotated walkthrough of the finite state OT implementation for word-final obstruent devoicing by Gerdemann and Hulden (2012)."
 features: 
     - Highlight
 ---

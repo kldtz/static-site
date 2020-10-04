@@ -1,7 +1,7 @@
 ---
 title: "Transducing German Cardinal Numbers"
 date: 2020-09-06T15:25:42+02:00
-description: "Converting spelled-out German cardinal number to numerals and vice versa. Exercise in writing finite-state transducers."
+description: "Converting spelled-out German cardinal numbers to numerals and vice versa. Exercise in writing finite-state transducers."
 features:
     - Highlight
 ---

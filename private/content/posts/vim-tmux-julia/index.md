@@ -1,7 +1,7 @@
 ---
 title: "Vim and Tmux as Alternative to Juno for Julia Development"
 date: 2020-02-15T12:51:48+01:00
-description: "Vim setup for programming in Julia."
+description: "Vim setup for programming in Julia with Tmux and vim-slime."
 features:
     - Highlight
 ---
