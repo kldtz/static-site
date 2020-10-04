@@ -52,7 +52,7 @@ $$</div>
 
 For $r=2$ there is only a single 2-combination and $r - 1 = 1$, thus the previous definition of $B$ remains unchanged.
 
-For convencience we define `$m_{i\cdot} = \sum_{j=1}^c m_{ij}$` as the sum over the $i$th row of a matrix $M$ and `$m_{\cdot j} = \sum_{i=1}^c m_{ij}$` as the sum over the $j$th column of $M$. Since $B$ is symmetric, row sums equal column sumns `$b_{i \cdot} = b_{\cdot i}$` (the number of assignments of label $i$ across all raters and units).
+For convencience we define $m_{i\cdot} = \sum_{j=1}^c m_{ij}$ as the sum over the $i$th row of a matrix $M$ and $m_{\cdot j} = \sum_{i=1}^c m_{ij}$ as the sum over the $j$th column of $M$. Since $B$ is symmetric, row sums equal column sumns $b_{i \cdot} = b_{\cdot i}$ (the number of assignments of label $i$ across all raters and units).
 
 ## Agreement Measures
 
@@ -130,7 +130,7 @@ All three measures compute expected agreement based purely on 'chance' given the
 
 <a id="1" href="#fn-1"><sup>1</sup></a> Here I use the definition of Krippendorff (2004, p. 231). He normalizes by the number of ratings per unit, but since we deal with a fixed number $r$ of ratings, this is equivalent.
 
-<a id="2" href="#fn-2"><sup>2</sup></a> Fleiss (1971) defines `$p_o = \frac{1}{u} \sum_{i=1}^u \frac{1}{r(r-1)} \sum_{j=1}^c n_{ij} (n_{ij} - 1)$` and `$p_e = \sum_{j=1}^c \left( \frac{1}{ur} \sum_{i=1}^u n_{ij} \right)^2$`, where $n_{ij}$ denotes the number of raters who assigned the $i$th unit to the $j$th category. It's easy to show that these definitions are equivalent to the ones given above (`$\frac{1}{r-1} \sum_{i=1}^u n_{ij} (n_{ij} - 1) = b_{jj}$` and `$\sum_{i=1}^u n_{ij} = b_{j \cdot} = b_{\cdot j}$`).
+<a id="2" href="#fn-2"><sup>2</sup></a> Fleiss (1971) defines $p_o = \frac{1}{u} \sum_{i=1}^u \frac{1}{r(r-1)} \sum_{j=1}^c n_{ij} (n_{ij} - 1)$ and $p_e = \sum_{j=1}^c \left( \frac{1}{ur} \sum_{i=1}^u n_{ij} \right)^2$, where $n_{ij}$ denotes the number of raters who assigned the $i$th unit to the $j$th category. It's easy to show that these definitions are equivalent to the ones given above ($\frac{1}{r-1} \sum_{i=1}^u n_{ij} (n_{ij} - 1) = b_{jj}$ and $\sum_{i=1}^u n_{ij} = b_{j \cdot} = b_{\cdot j}$).
 
 <hr>
 

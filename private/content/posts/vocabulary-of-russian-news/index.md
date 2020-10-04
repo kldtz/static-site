@@ -59,7 +59,7 @@ The empirical relation between absolute frequency and rank in this log-log plot 
 $$f(r) = Cr^{-1} $$
 </div>
 
-where $r$ is the frequency rank, `$f(r)$` is the absolute frequency of the lemma with rank `$r$`, and `$C$` is a constant of approximately 0.1 times the corpus size in tokens $N_T$ [(Zipf, 1949, ch.&nbsp;2 III)](#zipf-1949). Plotting this function with `$C=0.1 \cdot N_T$` for the first 10,000 ranks gives us the orange line in Fig. 1.
+where $r$ is the frequency rank, $f(r)$ is the absolute frequency of the lemma with rank $r$, and $C$ is a constant of approximately 0.1 times the corpus size in tokens $N_T$ [(Zipf, 1949, ch.&nbsp;2 III)](#zipf-1949). Plotting this function with $C=0.1 \cdot N_T$ for the first 10,000 ranks gives us the orange line in Fig. 1.
 
 ### Estimating the Necessary Passive Vocabulary
 
@@ -105,9 +105,9 @@ Finally, the corpus used for this analysis is quite large and heterogeneous. Peo
 
 <a id="2" href="#fn-2"><sup>2</sup></a> Because frequency and rank are estimated on the same corpus, the empirical distribution might seem more regular than it actually is due to correlated errors [(Piantadosi, 2014)](#piantadosi-2014). However, for our purposes this error is negligible.
 
-<a id="3" href="#fn-3"><sup>3</sup></a> This relationship only appears linear in a log-log plot: `$\log(\frac{C}{r}) = - \log(r) + \log(C)$`.
+<a id="3" href="#fn-3"><sup>3</sup></a> This relationship only appears linear in a log-log plot: $\log(\frac{C}{r}) = - \log(r) + \log(C)$.
 
-<a id="4" href="#fn-4"><sup>4</sup></a> A more general version of this power law was proposed by [Mandelbrot (1953)](#mandelbrot-1953): `$f(r) = C (r + a)^{-b}$` where `$a$` and `$b$` are constants (in our case `$a=0$` and `$b=1$`).
+<a id="4" href="#fn-4"><sup>4</sup></a> A more general version of this power law was proposed by [Mandelbrot (1953)](#mandelbrot-1953): $f(r) = C (r + a)^{-b}$ where $a$ and $b$ are constants (in our case $a=0$ and $b=1$).
 
 <a id="5" href="#fn-5"><sup>5</sup></a> There seems to be a linear relationship between the percentage of known words and reading comprehension, but it's not the only factor, see [Schmitt et al. (2011)](#schmitt-2011).
 

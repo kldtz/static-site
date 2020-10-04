@@ -52,7 +52,7 @@ $$
 d_D = 1 - F_1
 $$
 
-It is a semimetric because it satisfies non-negativity, identity of indiscernibles and symmetry, which is easy to see from the definition of $F_1$ in terms of $R$ and $P$, but does not satisfy the triangle inequality, e.g. for the three sets `$A = \{a\}$`, `$B = \{b\}$`, and `$AB = \{a, b\}$` we get $d_D(A, B) = 1$, $d_D(A, AB) = \frac{1}{3}$ and $d_D(AB, B) = \frac{1}{3}$, thus
+It is a semimetric because it satisfies non-negativity, identity of indiscernibles and symmetry, which is easy to see from the definition of $F_1$ in terms of $R$ and $P$, but does not satisfy the triangle inequality, e.g. for the three sets $A = \\{a\\}$, $B = \\{b\\}$, and $AB = \\{a, b\\}$ we get $d_D(A, B) = 1$, $d_D(A, AB) = \frac{1}{3}$ and $d_D(AB, B) = \frac{1}{3}$, thus
 $$
 d_D(A,B) \not\leq d_D(A, AB) + d_D(AB, B).
 $$
@@ -74,7 +74,7 @@ The **Jaccard distance** $d_J = 1 - J$ is a metric, as it satisfies not only non
 
 ## Set Similarity vs. Classifier Performance
 
-Assume that $R$ and $P$ are two subsets of another set $S$, that is, we no longer have only two sets $R$ and $P$, but two binary partitions of $S$, nameley the expected or real partition `$X = \{R, S \setminus R\}$` and the predicted partition `$Y = \{P, S \setminus P\}$`. With this superset $S$, we can define the set of **true negatives** $TN$ as the intersection of the relative complements of $R$ and $P$ in $S$:
+Assume that $R$ and $P$ are two subsets of another set $S$, that is, we no longer have only two sets $R$ and $P$, but two binary partitions of $S$, nameley the expected or real partition $X = \\{R, S \setminus R\\}$ and the predicted partition $Y = \\{P, S \setminus P\\}$. With this superset $S$, we can define the set of **true negatives** $TN$ as the intersection of the relative complements of $R$ and $P$ in $S$:
 
 <div>$$
 TN = (S \setminus R) \cap (S \setminus P)
