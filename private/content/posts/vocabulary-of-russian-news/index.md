@@ -84,12 +84,12 @@ The lemmas used here are generated programmatically. As mentioned above, in less
 
 Some lexemes can be derived from others (or a common root) by regular morphological processes, e.g., *inform* > *information*, *informative*. If they share a core meaning, they maybe don’t need to be learned separately. Such related lexemes (with all their word-forms) make up **word families**. To get a more optimistic estimate of the necessary vocabulary size, we should count word families instead of lexemes. However, the semantic relations between such derivates can be opaque, either because their meaning is not fully compositional right from the beginning or because the morphological processes are not productive anymore and the lexical semantics of the derivates have developed in different directions. Thus we might not be able to correctly guess the meaning of one lexeme based on another from the same word family as the following English examples from [Newmeyer (2009)](#newmeyer-2009) show:
 
-1. Idiosyncratic meaning relations ([Newmeyer 2009, p.&nbsp;94](#newmeyer-2009))
-  1. profess ('declare openly'), professor ('university teacher'), profession ('career')
-  2. ignore ('pay no attention to'), ignorance ('lack of knowledge'), ignoramus ('very stupid person')
-  3. person (‘human individual’), personal (‘private’), personable (‘friendly’), personality (‘character’),
+* Idiosyncratic meaning relations ([Newmeyer 2009, p.&nbsp;94](#newmeyer-2009))
+  * profess ('declare openly'), professor ('university teacher'), profession ('career')
+  * ignore ('pay no attention to'), ignorance ('lack of knowledge'), ignoramus ('very stupid person')
+  * person (‘human individual’), personal (‘private’), personable (‘friendly’), personality (‘character’),
 personalize (‘tailor to the individual’), impersonate (‘pass oneself off as’)
-  4. social (‘pertaining to society’; ‘interactive with others’), socialist (‘follower of a particular political
+  * social (‘pertaining to society’; ‘interactive with others’), socialist (‘follower of a particular political
 doctrine’), socialite (‘member of high society’)
 
 For our analysis we make the simplifying assumption that there is a one-to-one correspondence between tokens and lexemes. In reality, lexemes can consist of multiple tokens, e.g., *San Francisco*. More generally, we often learn [collocations](https://en.wikipedia.org/wiki/Collocation) instead of single words.
