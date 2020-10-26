@@ -11,6 +11,8 @@ Random writings about language, linguistics, math, programming and the like.
 
 ## 2020
 
+* [Herschel-Maxwell derivation of the normal distribution](/posts/herschel-maxwell-derivation-of-the-normal-distribution)
+
 * [Identifying bigram collocations](/posts/identifying-bigram-collocations)
 
 * [Transducing German cardinal numbers](/posts/transducing-german-cardinal-numbers)
