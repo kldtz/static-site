@@ -62,7 +62,7 @@ $$
 h(x) + h(y) = h(\sqrt{x^2 + y^2})
 $$
 
-Clearly $h(x)$ is a composition of the square and an exponential function. The base of the exponential doesn't matter, the important point is the relationship $b^x \cdot b^y = b^{x+y}$. Since $b^x = \(c^{\log_c b}\)^x = c^{(\log_c a) x}$, we can just pick a base and introduce a constant *a* that allows us to switch to any base: $
+Clearly $h(x)$ is a composition of the square and an exponential function. The base of the exponential doesn't matter, the important point is the relationship $b^x \cdot b^y = b^{x+y}$. Since $b^x = \(c^{\log_c b}\)^x = c^{(\log_c b) x}$, we can just pick a base and introduce a constant *a* that allows us to switch to any base: $
 h(x) = e^{ax^2}$. After expanding $h(x)$ again, we can solve for $f(x)$.
 
 $$
@@ -126,6 +126,8 @@ This already is a bell-shaped probabilty density function, but the mean is zero 
             <p>Restricting the family of bell-shaped functions to those that integrate to one</p>
         </figcaption>
 </figure>
+
+Alternatively, we could replace $c = \frac{b}{\sqrt{\pi}}$ and actually this is the way in which Jaynes (2003) presents the derivation, but it doesn't really matter as we'll eventually arrive at the same formula.<a id="fn-2"></a><sup>[2](#2)</sup>
 
 
 ## Variance / standard deviation
@@ -208,10 +210,14 @@ Thus, we finally arrived at the formula stated at the top of this page.
 
 ---
 
+<a id="1" href="#fn-1"><sup>1</sup></a> An archer or a darts player trying to hit the middle of a circular target are common variants.
+
+<a id="2" href="#fn-2"><sup>2</sup></a> If we replace $c = \frac{b}{\sqrt{\pi}}$, we get $f(x) = \frac{b}{\sqrt{\pi}} \cdot e^{-b^2 x^2}$, or $f(x) = \sqrt{\frac{\alpha}{\pi}} \cdot e^{-\alpha x^2}$ with $b = \sqrt{\alpha}$ and $\alpha > 0$ (this is the form that Jaynes gives after normalization). This function has a variance of $\sigma^2 = \frac{1}{2\alpha}$. If we solve for $\alpha$ and substitute back into the equation, we get the same result as at the end of the variance section of this post. Interestingly, for $\alpha = 1$, we get $f(x) = \frac{e^{-x^2}}{\sqrt{\pi}}$, the standard normal distribution of Gauss and Laplace, whereas if we substitute $c = 1$ in $f(x) = c \cdot e^{-\pi c^2 x^2}$, we end up with the standard normal distribution of Stigler (1982) that has a variance of $\sigma^2 = \frac{1}{2\pi}$.
+
+---
+
 Herschel, J. F. (1869). On the theory of probabilities. Journal of the Institute of Actuaries and Assurance Magazine, 15(3), 179-218.
 
 Jaynes, E. T. (2003). Probability theory: The logic of science. Cambridge University Press.
 
----
-
-<a id="1" href="#fn-1"><sup>1</sup></a> An archer or a darts player trying to hit the middle of a circular target are common variants.
+Stigler, M. S. (1982). A Modest Proposal: A New Standard for the Normal. The American Statistician, 36(2), 137-138.

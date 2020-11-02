@@ -45,10 +45,12 @@ According to the [De Moivre-Laplace theorem](https://en.wikipedia.org/wiki/De_Mo
 
 We start by defining the hypotheses we want to test. I copy the definitions from [Manning and Schütze's (1999)](#manning-schütze-1999).
 
-<div>$$
-H_0: P(w_2|w_1) = p = P(w_2|\neg w_1)\\
+$$
+H_0: P(w_2|w_1) = p = P(w_2|\neg w_1)
+$$
+$$
 H_A: P(w_2|w_1) = p_1 \neq p_2 = P(w_2|\neg w_1)
-$$</div>
+$$
 
 Note that this does not follow directly from the definition above. The test is two-sided because the null hypothesis is an equality (independence of $w_1$ and $w_2$). If it is rejected, we could have $P(w_2|w_1) > P(w_2|\neg w_1)$ or $P(w_2|w_1) < P(w_2|\neg w_1)$. In the latter case, we wouldn't be dealing with a collocation according to our definition. We can solve this problem by additionally testing for the direction.
 
