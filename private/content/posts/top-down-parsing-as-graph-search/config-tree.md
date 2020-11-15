@@ -5,7 +5,7 @@ link:
   - "/css/graph.css"
 ---
 
-Expanding on a footnote in the post [Top-Down Parsing as Graph Search](/top-down-parsing-as-graph-search): 
+Expanding on a footnote in the post [Top-Down Parsing as Graph Search](/posts/top-down-parsing-as-graph-search): 
 
 If each configuration has not only an index, but a full analysis stack, our graph is a tree, as one node cannot have exactly one analysis stack and more than one parent:
 
