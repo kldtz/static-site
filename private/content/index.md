@@ -5,8 +5,6 @@ description: "Random writings about language, linguistics, math, programming and
 template: "top"
 ---
 
-# Proceed to Decode
-
 Random writings about language, linguistics, math, programming and the like.
 
 ## 2020
