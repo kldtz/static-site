@@ -27,16 +27,6 @@ pub fn generate_index_content() -> String {
         html.push(date_div);
         html.push("</a>".to_string());
     }
+    html.push("</div>".to_string());
     html.join("\n")
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_index() {
-        let configs = generate_index_content();
-        println!("{}", configs);
-    }
 }
