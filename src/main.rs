@@ -32,7 +32,9 @@ fn main() {
     if command == "feed" {
         generate_feed();
     } else if command == "index" {
-        let html = generate_index();
+        let mut index = Page::new("private/content/index.md");
+        index.content = generate_index_content();
+        let html = generate_html(index);
         println!("{}", html);
     } 
     else if command == "page" {
@@ -46,14 +48,6 @@ fn main() {
     } else {
         panic!("Unknown command '{}'!", command);
     }
-}
-
-fn generate_index() -> String {
-    let mut template = fs::read_to_string("private/templates/top.html").unwrap();
-    template = template.replace("{{content}}", &generate_index_content());
-    let re = Regex::new(r"\{\{(.+?)\}\}").unwrap();
-    template = re.replace_all(&template, "").to_string();
-    template
 }
 
 /// Generates HTML from Page struct.
