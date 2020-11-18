@@ -8,6 +8,8 @@ mod page;
 use crate::page::{Page, Feature};
 mod rss;
 use crate::rss::{generate_feed};
+mod index;
+use crate::index::generate_index_content;
 
 macro_rules! needs_feature {
     ($page: expr, $feature: pat) => {
@@ -29,7 +31,11 @@ fn main() {
     let command = &args[1];
     if command == "feed" {
         generate_feed();
-    } else if command == "page" {
+    } else if command == "index" {
+        let html = generate_index();
+        println!("{}", html);
+    } 
+    else if command == "page" {
         if args.len() < 3 {
             panic!("Missing Markdown path argument!");
         }
@@ -40,6 +46,14 @@ fn main() {
     } else {
         panic!("Unknown command '{}'!", command);
     }
+}
+
+fn generate_index() -> String {
+    let mut template = fs::read_to_string("private/templates/top.html").unwrap();
+    template = template.replace("{{content}}", &generate_index_content());
+    let re = Regex::new(r"\{\{(.+?)\}\}").unwrap();
+    template = re.replace_all(&template, "").to_string();
+    template
 }
 
 /// Generates HTML from Page struct.

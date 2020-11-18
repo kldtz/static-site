@@ -5,7 +5,7 @@ HTML_FILES = $(patsubst private/content/%.md, public/%.html, $(MD_FILES))
 
 .PHONY: all sync-static deploy clean dev feed
 
-all: sync-static $(HTML_FILES) #deploy
+all: sync-static index $(HTML_FILES) #deploy
 
 sync-static:
 	# We cannot sync the whole private dir with the delete flag
@@ -30,3 +30,6 @@ clean:
 
 feed:
 	cargo run --release feed > public/rss.xml
+
+index:
+	cargo run --release index > public/index.html
