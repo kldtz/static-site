@@ -6,11 +6,14 @@ pub fn generate_feed() {
     let configs: Vec<(Config, String)> = collect_sorted_configs();
 
     let mut items: Vec<Item> = Vec::new();
-    for (c, sub_url) in configs {
+    for (i, (c, sub_url)) in configs.iter().enumerate() {
+        if i > 9 {
+            break;
+        }
         let url = format!("https://proceed-to-decode.com/posts/{}", sub_url);
         let item: Item = ItemBuilder::default()
-            .title(c.title)
-            .description(c.description.unwrap())
+            .title(c.title.to_string())
+            .description(c.description.as_ref().unwrap().to_string())
             .link(url.clone())
             .guid(GuidBuilder::default().value(url).build().unwrap())
             .pub_date(c.date.to_rfc2822())
