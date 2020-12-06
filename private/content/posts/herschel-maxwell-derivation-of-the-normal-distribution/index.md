@@ -14,7 +14,7 @@ $$
 
 It describes the well-known bell-shaped curve that is centered around the mean $\mu$, has inflection points at one standard deviation $\sigma$ around the mean, and integrates to one. Because of the [central limit theorem](https://en.wikipedia.org/wiki/Central_limit_theorem), this curve is lurking behind every corner in statistics.
 
-I recently read three beautiful derivations of this function in Jaynes (2003). In the following I'm expanding a bit on the *Herschel-Maxwell derivation* presented there. Not in a rigorous way, but in order to build some intuition. I'm starting off with a little thought experiment given by Herschel himself in 1869:
+I recently read three beautiful derivations of this function in Jaynes (2003). In the following I'm expanding on the *Herschel-Maxwell derivation* presented there. Not in a rigorous way, but in order to build some intuition. I'm starting off with a thought experiment given by Herschel himself in 1869:
 
 
 > Suppose a ball dropped from a given height, with the intention
@@ -63,7 +63,7 @@ h(x) + h(y) = h(\sqrt{x^2 + y^2})
 $$
 
 Clearly $h(x)$ is a composition of the square and an exponential function. The base of the exponential doesn't matter, the important point is the relationship $b^x \cdot b^y = b^{x+y}$. Since $b^x = \(c^{\log_c b}\)^x = c^{(\log_c b) x}$, we can just pick a base and introduce a constant *a* that allows us to switch to any base: $
-h(x) = e^{ax^2}$. After expanding $h(x)$ again, we can solve for $f(x)$.
+h(x) = e^{ax^2}$. After expanding $h(x)$ again, we solve for $f(x)$.
 
 $$
 f(x) = f(0) \cdot e^{ax^2}

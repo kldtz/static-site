@@ -13,7 +13,7 @@ Responsible for this site:
 
 Tobias Kolditz <br>
 Einsteinstraße 10 <br>
-04429 Leipzig
+04229 Leipzig
 
 **Contact** 
 

@@ -16,8 +16,8 @@ pub fn generate_index_content() -> String {
             html.push(year_h);
         }
         // item
-        let title = format!("<a class=\"post\" href=\"/posts/{}\">", sub_url);
-        html.push(title);
+        let item = format!("<a class=\"post\" href=\"/posts/{}\">", sub_url);
+        html.push(item);
         // title
         let title = format!("<span class=\"title\">{}</span>", config.title);
         html.push(title);
