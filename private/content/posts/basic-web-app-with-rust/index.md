@@ -6,7 +6,7 @@ features:
     - Highlight
 ---
 
-This post describes the Rust stack ([Actix Web](https://github.com/actix/actix-web), [Diesel](https://github.com/diesel-rs/diesel), [Askama](https://github.com/djc/askama)) for a basic web app that consists of a REST API, a Postgres database and a few views with JavaScript and CSS. The app is adding a backend to the editable graph from my [previous post](/posts/graph-editor-demo/). It allows creating and editing directed graphs. Each action is persisted in the database immediately. The code is on [GitHub](https://github.com/kldtz/graph-editor-app). Apart from the documentation and GitHub issues belonging to the different frameworks, I found Tore Pettersen's [tutorial on creating a REST API in Rust](https://cloudmaker.dev/how-to-create-a-rest-api-in-rust/) most helpful.
+This post describes the Rust stack ([Actix Web](https://github.com/actix/actix-web), [Diesel](https://github.com/diesel-rs/diesel), [Askama](https://github.com/djc/askama)) for a basic web app that consists of a REST API, a Postgres database and a few views with JavaScript and CSS. The app is adding a backend to the editable graph from my [previous post](/posts/graph-editor-demo/). It allows creating and editing directed graphs. Each action is persisted in the database immediately. The code is on [GitHub](https://github.com/kldtz/graph-editor-app/tree/v0.1.0). Apart from the documentation and GitHub issues belonging to the different frameworks, I found Tore Pettersen's [tutorial on creating a REST API in Rust](https://cloudmaker.dev/how-to-create-a-rest-api-in-rust/) most helpful.
 
 
 ## Server and routes
