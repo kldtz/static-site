@@ -1,5 +1,5 @@
 ---
-title: "Graph Editor Demo"
+title: "Demo: Graph Editor"
 date: 2020-11-21T10:24:00+01:00
 description: "Live demo of an improved visual graph editor built with D3.js"
 link:
