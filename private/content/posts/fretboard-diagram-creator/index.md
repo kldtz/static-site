@@ -30,4 +30,13 @@ link:
 
 Remember that all of this only runs in your browser, so be careful about refreshing the page. Implemented in plain JavaScript, without dependencies.
 
+
+### Example diagram
+
+A Dorian scale with fingerings. Root notes highlighted in blue, sixths in green.
+
+<figure id="fretboard-diagram-creator" class="half-full">
+<img src="/img/fretboard-diagram-creator/a-dorian-1-6.svg" alt="Example fretboard diagram" width=900 height=290>
+</figure>
+
 <script src="/fretboard-diagram-creator/fretboard.js"></script>
