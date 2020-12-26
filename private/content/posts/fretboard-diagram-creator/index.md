@@ -3,7 +3,7 @@ title: "Demo: Fretboard Diagram Creator"
 date: 2020-12-22T08:30:57+01:00
 description: "Online tool for creating fretboard diagrams, e.g., for scale charts with fingerings."
 link:
-  - "/fretboard-diagram-creator/fretboard.css"
+  - "/apps/fretboard-diagram-creator/fretboard.css"
 ---
 
 <figure id="fretboard-diagram-creator" class="half-full">
@@ -21,9 +21,9 @@ link:
 
   <p>
   <label>Start:</label>
-  <input id="start-fret" type="number" class="num-input" value="1" name="startFret" min=1 max=20 maxlength="2" style="width: 5ch" autocomplete=off>
+  <input id="start-fret" type="number" class="num-input" value="1" name="startFret" min=1 max=22 maxlength="2" style="width: 5ch" autocomplete=off>
   <label>End:</label>
-  <input id="end-fret" type="number" class="num-input" value="12" name="startFret" min=1 max=20 maxlength="2" style="width: 5ch" autocomplete=off>
+  <input id="end-fret" type="number" class="num-input" value="12" name="startFret" min=1 max=22 maxlength="2" style="width: 5ch" autocomplete=off>
   </p>
 </div>
 
@@ -49,4 +49,4 @@ A Dorian scale with fingerings. Root notes highlighted in blue, sixths in green.
 <img src="/img/fretboard-diagram-creator/a-dorian-1-6-crop.svg" alt="Example fretboard diagram" width=400 height=auto>
 </figure>
 
-<script src="/fretboard-diagram-creator/fretboard.js"></script>
+<script src="/apps/fretboard-diagram-creator/fretboard.js"></script>

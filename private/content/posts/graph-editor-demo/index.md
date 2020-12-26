@@ -3,7 +3,7 @@ title: "Demo: Graph Editor"
 date: 2020-11-21T10:24:00+01:00
 description: "Live demo of an improved visual graph editor built with D3.js"
 link:
-  - "/css/graph-editor/graph.css"
+  - "/apps/graph-editor/graph.css"
 ---
 
 [Graph-editor](https://github.com/kldtz/graph-editor) is an improved reimplementation of Colorado Reed's [directed-graph-creator](https://github.com/cjrd/directed-graph-creator).
@@ -37,4 +37,4 @@ I was looking for a tool with which non-technical folks could create and edit di
 
 <script src="https://d3js.org/d3.v6.min.js"></script>
 <script src="/lib/FileSaver.min.js"></script>
-<script src="/js/graph-editor/graph.js"></script>
+<script src="/apps/graph-editor/graph.js"></script>
