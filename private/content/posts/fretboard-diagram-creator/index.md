@@ -38,15 +38,6 @@ link:
 * Click *Reset* to **reset** your diagram and start from scratch.
 * Enter *start* fret and *end* fret to **display a different part of the fretboard**. Changes outside of the displayed part are kept until the diagram is reset.
 
-Remember that all of this only runs in your browser, so be careful about refreshing the page. Implemented in plain JavaScript, without dependencies.
-
-
-### Example diagram
-
-A Dorian scale with fingerings. Root notes highlighted in blue, sixths in green.
-
-<figure id="fretboard-diagram-creator" class="half-full">
-<img src="/img/fretboard-diagram-creator/a-dorian-1-6-crop.svg" alt="Example fretboard diagram" width=400 height=auto>
-</figure>
+Remember that all of this only runs in your browser, so be careful about refreshing the page. Implemented in plain JavaScript, without dependencies. Example diagrams can be found [here](/posts/fretboard-diagram-creator/modes.html).
 
 <script src="/apps/fretboard-diagram-creator/fretboard.js"></script>
