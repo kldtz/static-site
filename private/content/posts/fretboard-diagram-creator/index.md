@@ -40,4 +40,4 @@ link:
 
 Remember that all of this only runs in your browser, so be careful about refreshing the page. Implemented in plain JavaScript, without dependencies. Example diagrams can be found [here](/posts/fretboard-diagram-creator/modes.html).
 
-<script src="/apps/fretboard-diagram-creator/fretboard.js"></script>
+<script src="/apps/fretboard-diagram-creator/fretboard.js?version=2"></script>
