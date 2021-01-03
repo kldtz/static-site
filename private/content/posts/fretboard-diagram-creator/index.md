@@ -3,7 +3,7 @@ title: "Demo: Fretboard Diagram Creator"
 date: 2020-12-22T08:30:57+01:00
 description: "Online tool for creating fretboard diagrams, e.g., for scale charts with fingerings."
 link:
-  - "/apps/fretboard-diagram-creator/fretboard.css"
+  - "/apps/fretboard-diagram-creator/fretboard.css?version=2"
 ---
 
 <figure id="fretboard-diagram-creator" class="half-full">
