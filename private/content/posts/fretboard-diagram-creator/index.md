@@ -38,6 +38,6 @@ link:
 * Click *Reset* to **reset** your diagram and start from scratch.
 * Enter *start* fret and *end* fret to **display a different part of the fretboard**. Changes outside of the displayed part are kept until the diagram is reset.
 
-Remember that all of this only runs in your browser, so be careful about refreshing the page. Implemented in plain JavaScript, without dependencies. Example diagrams can be found [here](/posts/fretboard-diagram-creator/modes.html).
+Remember that all of this only runs in your browser, so be careful about refreshing the page. Implemented in plain JavaScript, without dependencies. Example diagrams can be found [here](/posts/fretboard-diagram-creator/modes.html). Comments are on [Reddit](https://www.reddit.com/r/musictheory/comments/kows26/a_simple_online_tool_for_creating_guitar/).
 
 <script src="/apps/fretboard-diagram-creator/fretboard.js?version=2"></script>
