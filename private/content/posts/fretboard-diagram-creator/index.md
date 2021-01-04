@@ -29,7 +29,7 @@ link:
 
 ### Interactions
 
-* Click one of the circles to **select** a note. The note is now highlighted by a dashed circle and will show up in your exported diagram.
+* Click one of the circles to **select** a note on the fretboard. The note is now highlighted by a dashed circle and will show up in your exported diagram. The open string notes on the left work the same way, however, they lack the circle.
 * Type *r*, *g*, *b*, *d*, or *w* to **color** the selected note (red, green, blue, black, white).
 * Press the *Delete* or *Backspace* key to **delete** the selected note.
 * Hold *CTRL* and click into a note to **edit** its label. Hit *Enter* or click outside of the note being edited to save the changes.
