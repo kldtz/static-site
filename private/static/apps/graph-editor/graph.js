@@ -6,7 +6,6 @@ class Graph {
         this.nodeId = this.nodes.reduce((acc, curr) => {
             return (acc > curr.id) ? acc : curr.id;
         }, 0);
-        console.log(no)
         this.setEdges(opts.edges)
         this.state = {
             mouseOverNode: null,
