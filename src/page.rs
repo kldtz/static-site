@@ -23,13 +23,6 @@ impl Page {
 
         Page { config, content }
     }
-
-    pub fn template_name(&self) -> &str {
-        match &self.config.template {
-            Some(name) => name,
-            _ => "default",
-        }
-    }
 }
 
 /// Metadata for page generation.
@@ -45,7 +38,7 @@ pub struct Config {
 }
 
 /// Optional features used by the page.
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, PartialEq)]
 pub enum Feature {
     MathJax,
     Highlight,
