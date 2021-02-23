@@ -57,9 +57,9 @@ pub fn collect_sorted_configs() -> Vec<(Config, String)> {
         glob("private/content/posts/**/index.md").expect("Failed to read Markdown index files")
     {
         let path = entry.unwrap();
-        let sub_url = path.to_str().unwrap().split('/').collect::<Vec<&str>>()[3];
+        let sub_url = path.strip_prefix("private/content/posts/").unwrap().parent().unwrap();
         let config: Config = read_config(&path);
-        configs.push((config, sub_url.to_string()));
+        configs.push((config, sub_url.display().to_string()));
     }
     // sort by date in decreasing order
     configs.sort_by(|c2, c1| c1.0.date.cmp(&c2.0.date));
