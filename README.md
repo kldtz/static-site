@@ -1,6 +1,6 @@
 # Site Generator
 
-Code for generating a static site. The content lives in a submodule under `private` and is expected to have the following structure:
+Code for generating my static site. The content lives in a submodule under `private` and is expected to have the following structure:
 
 ```bash
 ├── content
