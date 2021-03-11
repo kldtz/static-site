@@ -3,28 +3,23 @@ use chrono::Datelike;
 
 pub fn generate_index_content() -> String {
     let configs = collect_sorted_configs();
-    let mut html: Vec<String> = Vec::new();
-
+    let mut html = String::new();
     let mut year = 3000;
     for (config, sub_url) in configs {
         let date = config.date.format("%b %d");
         // year
         if config.date.year() < year {
             year = config.date.year();
-            let year_h = format!("<h2 class=\"year\">{}</h2>", year);
-            html.push(year_h);
+            html.push_str(&format!("<h2 class=\"year\">{}</h2>", year));
         }
         // item
-        let item = format!("<a class=\"post\" href=\"/posts/{}\">", sub_url);
-        html.push(item);
+        html.push_str(&format!("<a class=\"post\" href=\"/posts/{}\">", sub_url));
         // title
-        let title = format!("<span class=\"title\">{}</span>", config.title);
-        html.push(title);
+        html.push_str(&format!("<span class=\"title\">{}</span>", config.title));
         // month, day
         let date = date.to_string();
-        let date_div = format!("<span class=\"date\">{}</span>", date);
-        html.push(date_div);
-        html.push("</a>".to_string());
+        html.push_str(&format!("<span class=\"date\">{}</span>", date));
+        html.push_str("</a>");
     }
-    html.join("\n")
+    html
 }
