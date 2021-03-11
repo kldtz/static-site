@@ -4,7 +4,6 @@ use chrono::Datelike;
 pub fn generate_index_content() -> String {
     let configs = collect_sorted_configs();
     let mut html: Vec<String> = Vec::new();
-    html.push("<div class=\"index\">".to_string());
 
     let mut year = 3000;
     for (config, sub_url) in configs {
@@ -27,6 +26,5 @@ pub fn generate_index_content() -> String {
         html.push(date_div);
         html.push("</a>".to_string());
     }
-    html.push("</div>".to_string());
     html.join("\n")
 }
