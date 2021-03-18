@@ -22,7 +22,7 @@ public/%.html: private/content/%.md
 	cargo run --release page "$<" > "$@"
 
 dev:
-	cd public && browser-sync start --server --files .
+	browser-sync start --server 'public' --files 'public'
 
 clean:
 	rm -rf public/!(.git)
