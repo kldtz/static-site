@@ -1,6 +1,6 @@
 # Site Generator
 
-Code for generating my static site. The content lives in a submodule under `private` and is expected to have the following structure:
+Code for generating [my static site](https://proceed-to-decode.com/). The content lives in a submodule under `private` and is expected to have the following structure:
 
 ```bash
 ├── content
@@ -14,6 +14,8 @@ Code for generating my static site. The content lives in a submodule under `priv
 ```
 
 The `content` directory contains all Markdown files. For each index file under `posts`, a link is created on the home page. All files under `static` are simply copied to the public directory (keeping the path relative to `static`), e.g., JavaScript, CSS, pictures. Under `templates` the script is looking for the [Askama](https://github.com/djc/askama) templates linked in the Markdown headers.
+
+The website is written into the submodule `public`.
 
 ## Usage
 
