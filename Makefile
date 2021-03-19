@@ -5,9 +5,9 @@ HTML_FILES = $(patsubst private/content/%.md, public/%.html, $(MD_FILES))
 
 .PHONY: all publish sync-static clean dev feed
 
-all: sync-static $(HTML_FILES)
+all: sync-static index feed $(HTML_FILES)
 
-publish: sync-static index feed $(HTML_FILES)
+changes: sync-static $(HTML_FILES)
 
 sync-static:
 	# We cannot sync the whole private dir with the delete flag

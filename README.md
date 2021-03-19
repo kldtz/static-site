@@ -23,12 +23,14 @@ The website is written into the submodule `public`.
 # Create a new post
 ./bin/new "This is a title"
 
+# Publish site (including home page and feed)
+make
+
 # Run server and watch files in public dir
 make dev
 # Generate HTML from changed Markdown files
-make
-# Publish site (including home page and feed)
-make publish
+# (this is run on saving .md files in VSCode)
+make changes
 # Clean public dir
 make clean
 

@@ -3,7 +3,7 @@
         "commands": [
             {
                 "match": "private/content/.*\\.md$",
-                "cmd": "make"
+                "cmd": "make changes"
             }
         ]
     }
