@@ -1,0 +1,10 @@
+{
+    "emeraldwalk.runonsave": {
+        "commands": [
+            {
+                "match": "private/content/.*\\.md$",
+                "cmd": "make"
+            }
+        ]
+    }
+}
