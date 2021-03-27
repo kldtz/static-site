@@ -1,8 +1,28 @@
 use chrono::{DateTime, Utc};
 use glob::glob;
+use lazy_static::lazy_static;
+use regex::{Regex, RegexBuilder};
 use serde::Deserialize;
-use std::fs;
 use std::path::Path;
+use std::{error, fs};
+
+// Type alias for result with custom errors determined at runtime (heap)
+type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
+
+lazy_static! {
+    // Image element with SVG source that should be inlined
+    static ref IMG: Regex = RegexBuilder::new(r#"<img data-inline="true" src="(.+?)".*?/>"#)
+        .dot_matches_new_line(true)
+        .build()
+        .unwrap();
+    // SVG element
+    static ref SVG: Regex = RegexBuilder::new(r"<svg.*?</svg>")
+        .dot_matches_new_line(true)
+        .build()
+        .unwrap();
+    // HTML id attribute
+    static ref ID: Regex = Regex::new(r#"id=".*?""#).unwrap();
+}
 
 /// Page read from YAML header and Markdown content.
 pub struct Page {
@@ -11,18 +31,37 @@ pub struct Page {
 }
 
 impl Page {
-    pub fn new(path: &str) -> Page {
-        let content = fs::read_to_string(path).unwrap();
-
+    pub fn new(path: &str) -> Result<Page> {
+        let content = fs::read_to_string(path)?;
         // Extract and parse yaml header
         let (start, end) = find_config(&content);
         let yaml = &content[start..end];
-        let config: Config = serde_yaml::from_str(&yaml).unwrap();
+        let config: Config = serde_yaml::from_str(&yaml)?;
         // Extract markdown content
-        let content = (&content[end + 3..]).to_string();
-
-        Page { config, content }
+        let raw_content = (&content[end + 3..]).to_string();
+        let content = preprocess_markdown(&raw_content)?;
+        Ok(Page { config, content })
     }
+}
+
+/// Inlines SVGs for proper colors in dark mode.
+fn preprocess_markdown(raw_content: &str) -> Result<String> {
+    let mut content = String::new();
+    let mut last_offset = 0;
+    for cap in IMG.captures_iter(&raw_content) {
+        let svg = fs::read_to_string(format!(
+            "private/static{}",
+            cap.get(1).map_or("", |m| m.as_str())
+        ))?;
+        let svg = ID.replace_all(&svg, "");
+        let svg_match = SVG.find(&svg).unwrap();
+        let full_match = cap.get(0).unwrap();
+        content.push_str(&raw_content[last_offset..full_match.start()]);
+        content.push_str(&svg[svg_match.range()]);
+        last_offset = full_match.end();
+    }
+    content.push_str(&raw_content[last_offset..]);
+    Ok(content)
 }
 
 /// Metadata for page generation.
@@ -57,7 +96,11 @@ pub fn collect_sorted_configs() -> Vec<(Config, String)> {
         glob("private/content/posts/**/index.md").expect("Failed to read Markdown index files")
     {
         let path = entry.unwrap();
-        let sub_url = path.strip_prefix("private/content/posts/").unwrap().parent().unwrap();
+        let sub_url = path
+            .strip_prefix("private/content/posts/")
+            .unwrap()
+            .parent()
+            .unwrap();
         let config: Config = read_config(&path);
         configs.push((config, sub_url.display().to_string()));
     }

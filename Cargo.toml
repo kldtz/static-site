@@ -1,16 +1,18 @@
 [package]
-name = "page_generator"
-version = "0.1.0"
 authors = ["Tobias Kolditz <tbs.kldtz@gmail.com>"]
 edition = "2018"
+name = "page_generator"
+version = "0.1.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 askama = "0.10"
-chrono = { version = "0.4", features = ["serde"] }
+chrono = {version = "0.4", features = ["serde"]}
 glob = "0.3.0"
+lazy_static = "1.4"
 pulldown-cmark = "0.7"
+regex = "1"
 rss = "1.9.0"
-serde = { version = "1.0", features = ["derive"] }
+serde = {version = "1.0", features = ["derive"]}
 serde_yaml = "0.8"

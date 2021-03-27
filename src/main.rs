@@ -20,7 +20,7 @@ fn main() {
     if command == "feed" {
         generate_feed();
     } else if command == "index" {
-        let mut index = Page::new("private/content/index.md");
+        let mut index = Page::new("private/content/index.md").unwrap();
         index.content = generate_index_content();
         let html = generate_html(index);
         println!("{}", html);
@@ -29,7 +29,7 @@ fn main() {
             panic!("Missing Markdown path argument!");
         }
         let md = &args[2];
-        let page = Page::new(md);
+        let page = Page::new(md).unwrap();
         let html = generate_html(page);
         println!("{}", html);
     } else {
