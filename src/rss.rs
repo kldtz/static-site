@@ -1,3 +1,4 @@
+//! Generation of RSS feed.
 use rss::{ChannelBuilder, GuidBuilder, Item, ItemBuilder};
 
 use crate::page::{collect_sorted_configs, Config};

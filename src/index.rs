@@ -1,3 +1,4 @@
+//! Generation of index page listing all posts in reverse chronological order.
 use crate::page::collect_sorted_configs;
 use chrono::Datelike;
 

@@ -1,4 +1,4 @@
-//! Quick and dirty script for generating HTML from Markdown file.
+//! Custom static site generator. Turns Markdown into HTML.
 use pulldown_cmark::{html, Options, Parser};
 use std::env;
 

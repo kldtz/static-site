@@ -1,3 +1,4 @@
+//! Generation of single content page.
 use chrono::{DateTime, Utc};
 use glob::glob;
 use lazy_static::lazy_static;
@@ -49,14 +50,17 @@ fn preprocess_markdown(raw_content: &str) -> Result<String> {
     let mut content = String::new();
     let mut last_offset = 0;
     for cap in IMG.captures_iter(&raw_content) {
+        let full_match = cap.get(0).unwrap();
+        content.push_str(&raw_content[last_offset..full_match.start()]);
+        // read SVG file specified in src attribute
         let svg = fs::read_to_string(format!(
             "private/static{}",
             cap.get(1).map_or("", |m| m.as_str())
         ))?;
+        // delete the IDs, they might not be unique after inlining
         let svg = ID.replace_all(&svg, "");
+        // we only inline the SVG (assume there is one per file)
         let svg_match = SVG.find(&svg).unwrap();
-        let full_match = cap.get(0).unwrap();
-        content.push_str(&raw_content[last_offset..full_match.start()]);
         content.push_str(&svg[svg_match.range()]);
         last_offset = full_match.end();
     }
