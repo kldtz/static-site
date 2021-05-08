@@ -1,6 +1,7 @@
 //! Custom static site generator. Turns Markdown into HTML.
 use pulldown_cmark::{html, Options, Parser};
 use std::env;
+use std::path::Path;
 
 use askama::Template;
 
@@ -20,7 +21,8 @@ fn main() {
     if command == "feed" {
         generate_feed();
     } else if command == "index" {
-        let mut index = Page::new("private/content/index.md").unwrap();
+        let path = Path::new("private/content/index.md");
+        let mut index = Page::new(&path).unwrap();
         index.content = generate_index_content();
         let html = generate_html(index);
         println!("{}", html);
@@ -28,8 +30,8 @@ fn main() {
         if args.len() < 3 {
             panic!("Missing Markdown path argument!");
         }
-        let md = &args[2];
-        let page = Page::new(md).unwrap();
+        let md = Path::new(&args[2]);
+        let page = Page::new(&md).unwrap();
         let html = generate_html(page);
         println!("{}", html);
     } else {

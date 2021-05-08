@@ -32,7 +32,7 @@ pub struct Page {
 }
 
 impl Page {
-    pub fn new(path: &str) -> Result<Page> {
+    pub fn new(path: &Path) -> Result<Page> {
         let content = fs::read_to_string(path)?;
         // Extract and parse yaml header
         let (start, end) = find_config(&content);
@@ -40,29 +40,37 @@ impl Page {
         let config: Config = serde_yaml::from_str(&yaml)?;
         // Extract markdown content
         let raw_content = (&content[end + 3..]).to_string();
-        let content = preprocess_markdown(&raw_content)?;
+        let content = preprocess_markdown(path, &raw_content)?;
         Ok(Page { config, content })
     }
 }
 
 /// Inlines SVGs for proper colors in dark mode.
-fn preprocess_markdown(raw_content: &str) -> Result<String> {
+fn preprocess_markdown(path: &Path, raw_content: &str) -> Result<String> {
     let mut content = String::new();
     let mut last_offset = 0;
+    let static_dir = Path::new("private/static");
     for cap in IMG.captures_iter(&raw_content) {
         let full_match = cap.get(0).unwrap();
         content.push_str(&raw_content[last_offset..full_match.start()]);
-        // read SVG file specified in src attribute
-        let svg = fs::read_to_string(format!(
-            "private/static{}",
-            cap.get(1).map_or("", |m| m.as_str())
-        ))?;
-        // delete the IDs, they might not be unique after inlining
-        let svg = ID.replace_all(&svg, "");
-        // we only inline the SVG (assume there is one per file)
-        let svg_match = SVG.find(&svg).unwrap();
-        content.push_str(&svg[svg_match.range()]);
-        last_offset = full_match.end();
+        if let Some(p) = cap.get(1) {
+            // construct SVG path specified in src attribute
+            let p_string = p.as_str();
+            let page_dir = path.parent().unwrap();
+            let svg_path = if p_string.starts_with("/") {
+                static_dir.join(p_string)
+            } else {
+                page_dir.join(p_string)
+            };
+            // read SVG file
+            let svg = fs::read_to_string(svg_path)?;
+            // delete the IDs, they might not be unique after inlining
+            let svg = ID.replace_all(&svg, "");
+            // we only inline the SVG (assume there is one per file)
+            let svg_match = SVG.find(&svg).unwrap();
+            content.push_str(&svg[svg_match.range()]);
+            last_offset = full_match.end();
+        };
     }
     content.push_str(&raw_content[last_offset..]);
     Ok(content)

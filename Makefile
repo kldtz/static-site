@@ -12,7 +12,8 @@ changes: sync-static $(HTML_FILES)
 sync-static:
 	# We cannot sync the whole private dir with the delete flag
 	# because it would remove all non-static files
-	rsync -r --exclude ".git" private/static/* public/ --delete
+	rsync -r --exclude ".git" private/static/* public/
+	rsync -r --exclude "*.md" --exclude "*.draft*" private/content/* public/
 	# Hidden files are ignored by the command above
 	touch public/.nojekyll
 
