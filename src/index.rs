@@ -1,9 +1,9 @@
 //! Generation of index page listing all posts in reverse chronological order.
-use crate::page::collect_sorted_configs;
+use crate::page::{collect_sorted_configs, SsgResult};
 use chrono::Datelike;
 
-pub fn generate_index_content() -> String {
-    let configs = collect_sorted_configs();
+pub fn generate_index_content() -> SsgResult<String> {
+    let configs = collect_sorted_configs()?;
     let mut html = String::new();
     let mut year = 3000;
     for (config, sub_url) in configs {
@@ -22,5 +22,5 @@ pub fn generate_index_content() -> String {
         html.push_str(&format!("<span class=\"date\">{}</span>", date));
         html.push_str("</a>");
     }
-    html
+    Ok(html)
 }

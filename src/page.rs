@@ -8,7 +8,7 @@ use std::path::Path;
 use std::{error, fs};
 
 // Type alias for result with custom errors determined at runtime (heap)
-type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
+pub type SsgResult<T> = std::result::Result<T, Box<dyn error::Error>>;
 
 lazy_static! {
     // Image element with SVG source that should be inlined
@@ -32,10 +32,11 @@ pub struct Page {
 }
 
 impl Page {
-    pub fn new(path: &Path) -> Result<Page> {
+    pub fn new(path: &Path) -> SsgResult<Page> {
         let content = fs::read_to_string(path)?;
         // Extract and parse yaml header
-        let (start, end) = find_config(&content);
+        let (start, end) =
+            find_config(&content).ok_or(format!("{:?} is missing YAML header.", path))?;
         let yaml = &content[start..end];
         let config: Config = serde_yaml::from_str(&yaml)?;
         // Extract markdown content
@@ -46,28 +47,32 @@ impl Page {
 }
 
 /// Inlines SVGs for proper colors in dark mode.
-fn preprocess_markdown(path: &Path, raw_content: &str) -> Result<String> {
+fn preprocess_markdown(path: &Path, raw_content: &str) -> SsgResult<String> {
     let mut content = String::new();
     let mut last_offset = 0;
     let static_dir = Path::new("private/static");
     for cap in IMG.captures_iter(&raw_content) {
-        let full_match = cap.get(0).unwrap();
+        let full_match = cap
+            .get(0)
+            .ok_or("Could not get match for zero capture group!")?;
         content.push_str(&raw_content[last_offset..full_match.start()]);
-        if let Some(p) = cap.get(1) {
+        if let Some(src) = cap.get(1) {
             // construct SVG path specified in src attribute
-            let p_string = p.as_str();
-            let page_dir = path.parent().unwrap();
-            let svg_path = if p_string.starts_with("/") {
-                static_dir.join(p_string)
+            let src_str = src.as_str();
+            let page_dir = path.parent().ok_or("Path argument has no parent!")?;
+            let svg_path = if src_str.starts_with("/") {
+                static_dir.join(src_str)
             } else {
-                page_dir.join(p_string)
+                page_dir.join(src_str)
             };
             // read SVG file
             let svg = fs::read_to_string(svg_path)?;
             // delete the IDs, they might not be unique after inlining
             let svg = ID.replace_all(&svg, "");
             // we only inline the SVG (assume there is one per file)
-            let svg_match = SVG.find(&svg).unwrap();
+            let svg_match = SVG
+                .find(&svg)
+                .ok_or(format!("{} does not contain any SVG element.", src_str))?;
             content.push_str(&svg[svg_match.range()]);
             last_offset = full_match.end();
         };
@@ -95,36 +100,36 @@ pub enum Feature {
     Highlight,
 }
 
-pub fn find_config(content: &str) -> (usize, usize) {
+pub fn find_config(content: &str) -> Option<(usize, usize)> {
     let mut iter = content.match_indices("---");
-    let (start, _) = iter.next().unwrap();
-    let (end, _) = iter.next().unwrap();
-    (start + 3, end)
+    let (start, _) = iter.next()?;
+    let (end, _) = iter.next()?;
+    Some((start + 3, end))
 }
 
-pub fn collect_sorted_configs() -> Vec<(Config, String)> {
+pub fn collect_sorted_configs() -> SsgResult<Vec<(Config, String)>> {
     let mut configs: Vec<(Config, String)> = Vec::new();
     for entry in
         glob("private/content/posts/**/index.md").expect("Failed to read Markdown index files")
     {
-        let path = entry.unwrap();
+        let path = entry?;
         let sub_url = path
-            .strip_prefix("private/content/posts/")
-            .unwrap()
+            .strip_prefix("private/content/posts/")?
             .parent()
-            .unwrap();
-        let config: Config = read_config(&path);
+            .ok_or(format!("Error constructing relative path for {:?}", path))?;
+        let config: Config = read_config(&path)?;
         configs.push((config, sub_url.display().to_string()));
     }
     // sort by date in decreasing order
     configs.sort_by(|c2, c1| c1.0.date.cmp(&c2.0.date));
-    configs
+    Ok(configs)
 }
 
-fn read_config(path: &Path) -> Config {
-    let content = fs::read_to_string(path).unwrap();
-    let (start, end) = find_config(&content);
+fn read_config(path: &Path) -> SsgResult<Config> {
+    let content = fs::read_to_string(path)?;
+    let (start, end) =
+        find_config(&content).ok_or(format!("{:?} is missing YAML header.", path))?;
     let yaml = &content[start..end];
-    let config: Config = serde_yaml::from_str(&yaml).unwrap();
-    config
+    let config: Config = serde_yaml::from_str(&yaml)?;
+    Ok(config)
 }

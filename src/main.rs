@@ -6,7 +6,7 @@ use std::path::Path;
 use askama::Template;
 
 mod page;
-use crate::page::{Feature, Page};
+use crate::page::{Feature, Page, SsgResult};
 mod rss;
 use crate::rss::generate_feed;
 mod index;
@@ -19,24 +19,43 @@ fn main() {
     }
     let command = &args[1];
     if command == "feed" {
-        generate_feed();
+        print_result(generate_feed(), "RSS feed");
     } else if command == "index" {
-        let path = Path::new("private/content/index.md");
-        let mut index = Page::new(&path).unwrap();
-        index.content = generate_index_content();
-        let html = generate_html(index);
-        println!("{}", html);
+        let result = generate_index_page("private/content/index.md");
+        print_result(result, "index page");
     } else if command == "page" {
         if args.len() < 3 {
-            panic!("Missing Markdown path argument!");
+            eprintln!("Missing Markdown path argument!");
+            std::process::exit(1);
         }
-        let md = Path::new(&args[2]);
-        let page = Page::new(&md).unwrap();
-        let html = generate_html(page);
-        println!("{}", html);
+        let result = generate_content_page(&args[2]);
+        print_result(result, &args[2]);
     } else {
         panic!("Unknown command '{}'!", command);
     }
+}
+
+fn print_result(result: SsgResult<String>, context: &str) {
+    match result {
+        Ok(html) => println!("{}", html),
+        Err(e) => {
+            eprintln!("Error while generating {}:\n{:?}", context, e);
+            std::process::exit(1)
+        }
+    }
+}
+
+fn generate_index_page(index_path: &str) -> SsgResult<String> {
+    let path = Path::new(index_path);
+    let mut index = Page::new(&path)?;
+    index.content = generate_index_content()?;
+    generate_html(index)
+}
+
+fn generate_content_page(content_path: &str) -> SsgResult<String> {
+    let md = Path::new(content_path);
+    let page = Page::new(&md)?;
+    generate_html(page)
 }
 
 #[derive(Template)]
@@ -62,7 +81,7 @@ struct TopTemplate<'a> {
 }
 
 /// Generates HTML from Page struct.
-fn generate_html(page: Page) -> String {
+fn generate_html(page: Page) -> SsgResult<String> {
     // Convert markdown to HTML
     let mut options = Options::empty();
     options.insert(Options::ENABLE_TABLES);
@@ -70,24 +89,24 @@ fn generate_html(page: Page) -> String {
     let mut content = String::new();
     html::push_html(&mut content, parser);
 
-    match &page.config.template {
+    let res = match &page.config.template {
         Some(template) => match &template[..] {
-            "default" => render_default(page, &content),
+            "default" => render_default(page, &content)?,
             "top" => TopTemplate {
                 title: &page.config.title,
                 description: &page.config.description,
                 link: page.config.link.unwrap_or(Vec::new()),
                 content: &content,
             }
-            .render()
-            .unwrap(),
+            .render()?,
             unknown => panic!("Unknown template {}", unknown),
         },
-        None => render_default(page, &content)
-    }
+        None => render_default(page, &content)?,
+    };
+    Ok(res)
 }
 
-fn render_default(page: Page, content: &String) -> String {
+fn render_default(page: Page, content: &String) -> Result<String, askama::Error> {
     let features = page.config.features.unwrap_or(Vec::new());
     DefaultTemplate {
         title: &page.config.title,
@@ -100,5 +119,4 @@ fn render_default(page: Page, content: &String) -> String {
         content: &content,
     }
     .render()
-    .unwrap()
 }

@@ -1,10 +1,10 @@
 //! Generation of RSS feed.
 use rss::{ChannelBuilder, GuidBuilder, Item, ItemBuilder};
 
-use crate::page::{collect_sorted_configs, Config};
+use crate::page::{collect_sorted_configs, Config, SsgResult};
 
-pub fn generate_feed() {
-    let configs: Vec<(Config, String)> = collect_sorted_configs();
+pub fn generate_feed() -> SsgResult<String> {
+    let configs: Vec<(Config, String)> = collect_sorted_configs()?;
 
     let mut items: Vec<Item> = Vec::new();
     for (i, (c, sub_url)) in configs.iter().enumerate() {
@@ -14,12 +14,11 @@ pub fn generate_feed() {
         let url = format!("https://proceed-to-decode.com/posts/{}", sub_url);
         let item: Item = ItemBuilder::default()
             .title(c.title.to_string())
-            .description(c.description.as_ref().unwrap().to_string())
+            .description(c.description.clone())
             .link(url.clone())
-            .guid(GuidBuilder::default().value(url).build().unwrap())
+            .guid(GuidBuilder::default().value(url).build()?)
             .pub_date(c.date.to_rfc2822())
-            .build()
-            .unwrap();
+            .build()?;
         items.push(item);
     }
 
@@ -28,9 +27,7 @@ pub fn generate_feed() {
         .link("https://proceed-to-decode.com/")
         .description("Latest posts")
         .items(items)
-        .build()
-        .unwrap();
+        .build()?;
 
-    let string = channel.to_string();
-    println!("{}", string);
+    Ok(channel.to_string())
 }
