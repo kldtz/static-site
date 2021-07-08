@@ -4,11 +4,10 @@ use glob::glob;
 use lazy_static::lazy_static;
 use regex::{Regex, RegexBuilder};
 use serde::Deserialize;
+use std::fs;
 use std::path::Path;
-use std::{error, fs};
 
-// Type alias for result with custom errors determined at runtime (heap)
-pub type SsgResult<T> = std::result::Result<T, Box<dyn error::Error>>;
+use crate::SsgResult;
 
 lazy_static! {
     // Image element with SVG source that should be inlined
@@ -27,7 +26,7 @@ lazy_static! {
 
 /// Page read from YAML header and Markdown content.
 pub struct Page {
-    pub config: Config,
+    pub config: PageConfig,
     pub content: String,
 }
 
@@ -38,7 +37,7 @@ impl Page {
         let (start, end) =
             find_config(&content).ok_or(format!("{:?} is missing YAML header.", path))?;
         let yaml = &content[start..end];
-        let config: Config = serde_yaml::from_str(&yaml)?;
+        let config: PageConfig = serde_yaml::from_str(&yaml)?;
         // Extract markdown content
         let raw_content = (&content[end + 3..]).to_string();
         let content = preprocess_markdown(path, &raw_content)?;
@@ -83,7 +82,7 @@ fn preprocess_markdown(path: &Path, raw_content: &str) -> SsgResult<String> {
 
 /// Metadata for page generation.
 #[derive(Deserialize, Debug)]
-pub struct Config {
+pub struct PageConfig {
     pub title: String,
     pub date: DateTime<Utc>,
     pub description: Option<String>,
@@ -107,8 +106,8 @@ pub fn find_config(content: &str) -> Option<(usize, usize)> {
     Some((start + 3, end))
 }
 
-pub fn collect_sorted_configs() -> SsgResult<Vec<(Config, String)>> {
-    let mut configs: Vec<(Config, String)> = Vec::new();
+pub fn collect_sorted_configs() -> SsgResult<Vec<(PageConfig, String)>> {
+    let mut configs: Vec<(PageConfig, String)> = Vec::new();
     for entry in
         glob("private/content/posts/**/index.md").expect("Failed to read Markdown index files")
     {
@@ -117,7 +116,7 @@ pub fn collect_sorted_configs() -> SsgResult<Vec<(Config, String)>> {
             .strip_prefix("private/content/posts/")?
             .parent()
             .ok_or(format!("Error constructing relative path for {:?}", path))?;
-        let config: Config = read_config(&path)?;
+        let config: PageConfig = read_config(&path)?;
         configs.push((config, sub_url.display().to_string()));
     }
     // sort by date in decreasing order
@@ -125,11 +124,11 @@ pub fn collect_sorted_configs() -> SsgResult<Vec<(Config, String)>> {
     Ok(configs)
 }
 
-fn read_config(path: &Path) -> SsgResult<Config> {
+fn read_config(path: &Path) -> SsgResult<PageConfig> {
     let content = fs::read_to_string(path)?;
     let (start, end) =
         find_config(&content).ok_or(format!("{:?} is missing YAML header.", path))?;
     let yaml = &content[start..end];
-    let config: Config = serde_yaml::from_str(&yaml)?;
+    let config: PageConfig = serde_yaml::from_str(&yaml)?;
     Ok(config)
 }

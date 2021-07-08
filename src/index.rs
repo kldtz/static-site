@@ -1,5 +1,6 @@
 //! Generation of index page listing all posts in reverse chronological order.
-use crate::page::{collect_sorted_configs, SsgResult};
+use crate::page::{collect_sorted_configs};
+use crate::SsgResult;
 use chrono::Datelike;
 
 pub fn generate_index_content() -> SsgResult<String> {

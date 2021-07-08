@@ -1,12 +1,17 @@
 //! Custom static site generator. Turns Markdown into HTML.
+use askama::Template;
 use pulldown_cmark::{html, Options, Parser};
 use std::env;
+use std::error;
 use std::path::Path;
 
-use askama::Template;
+// Type alias for result with custom errors determined at runtime (heap)
+pub type SsgResult<T> = std::result::Result<T, Box<dyn error::Error>>;
 
+mod config;
+use crate::config::{read_config};
 mod page;
-use crate::page::{Feature, Page, SsgResult};
+use crate::page::{Feature, Page};
 mod rss;
 use crate::rss::generate_feed;
 mod index;
@@ -17,9 +22,10 @@ fn main() {
     if args.len() < 2 {
         panic!("Too few arguments!");
     }
+    let config = read_config().expect("Invalid config: website.yaml!");
     let command = &args[1];
     if command == "feed" {
-        print_result(generate_feed(), "RSS feed");
+        print_result(generate_feed(&config.url, &config.title), "RSS feed");
     } else if command == "index" {
         let result = generate_index_page("private/content/index.md");
         print_result(result, "index page");
