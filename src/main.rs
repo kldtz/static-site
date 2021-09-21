@@ -68,6 +68,7 @@ fn generate_content_page(content_path: &str) -> SsgResult<String> {
 #[template(path = "default.html", escape = "none")]
 struct DefaultTemplate<'a> {
     title: &'a str,
+    language: &'a str,
     date: &'a str,
     description: &'a Option<String>,
     mathjax: bool,
@@ -116,6 +117,7 @@ fn render_default(page: Page, content: &String) -> Result<String, askama::Error>
     let features = page.config.features.unwrap_or(Vec::new());
     DefaultTemplate {
         title: &page.config.title,
+        language: &page.config.language.unwrap_or("en".to_string()),
         date: &page.config.date.format("%b %e, %Y").to_string(),
         description: &page.config.description,
         mathjax: features.iter().any(|f| f == &Feature::MathJax),

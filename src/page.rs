@@ -90,6 +90,7 @@ pub struct PageConfig {
     pub features: Option<Vec<Feature>>,
     pub scripts: Option<Vec<String>>,
     pub link: Option<Vec<String>>,
+    pub language: Option<String>,
 }
 
 /// Optional features used by the page.
