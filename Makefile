@@ -33,3 +33,6 @@ feed:
 
 index:
 	cargo run --release index > public/index.html
+
+publish:
+	./bin/publish.sh "Update"

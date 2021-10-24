@@ -23,7 +23,7 @@ The website is written into the submodule `public`.
 # Create a new post
 ./bin/new "This is a title"
 
-# Publish site (including home page and feed)
+# Generate all files (including home page and feed)
 make
 
 # Run server and watch files in public dir
@@ -38,4 +38,7 @@ make clean
 make feed
 # Update home page
 make index
+
+# Publish all changes with generic commit message
+make publish
 ```
