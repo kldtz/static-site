@@ -9,10 +9,10 @@ version = "0.1.0"
 [dependencies]
 askama = "0.10"
 chrono = {version = "0.4", features = ["serde"]}
-glob = "0.3.0"
+glob = "0.3"
 lazy_static = "1.4"
-pulldown-cmark = "0.7"
+pulldown-cmark = "0.8"
 regex = "1"
-rss = "1.9.0"
-serde = {version = "1.0", features = ["derive"]}
+rss = "1.9"
+serde = {version = "1", features = ["derive"]}
 serde_yaml = "0.8"
