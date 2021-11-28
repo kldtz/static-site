@@ -11,7 +11,7 @@ use crate::SsgResult;
 
 lazy_static! {
     // Image element with SVG source that should be inlined
-    static ref IMG: Regex = RegexBuilder::new(r#"<img data-inline="true" src="(.+?)".*?/>"#)
+    static ref IMG: Regex = RegexBuilder::new(r#"<img data-inline="(true|false)" src="(.+?)".*?/>"#)
         .dot_matches_new_line(true)
         .build()
         .unwrap();
@@ -55,7 +55,7 @@ fn preprocess_markdown(path: &Path, raw_content: &str) -> SsgResult<String> {
             .get(0)
             .ok_or("Could not get match for zero capture group!")?;
         content.push_str(&raw_content[last_offset..full_match.start()]);
-        if let Some(src) = cap.get(1) {
+        if let (Some(replace_ids), Some(src)) = (cap.get(1), cap.get(2)) {
             // construct SVG path specified in src attribute
             let src_str = src.as_str();
             let page_dir = path.parent().ok_or("Path argument has no parent!")?;
@@ -67,7 +67,11 @@ fn preprocess_markdown(path: &Path, raw_content: &str) -> SsgResult<String> {
             // read SVG file
             let svg = fs::read_to_string(svg_path)?;
             // delete the IDs, they might not be unique after inlining
-            let svg = ID.replace_all(&svg, "");
+            let svg = if replace_ids.as_str() == "true" {
+                ID.replace_all(&svg, "").to_string()
+            } else {
+                svg
+            };
             // we only inline the SVG (assume there is one per file)
             let svg_match = SVG
                 .find(&svg)
