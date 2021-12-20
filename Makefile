@@ -5,8 +5,11 @@ HTML_FILES = $(patsubst private/content/%.md, public/%.html, $(MD_FILES))
 
 .PHONY: all publish sync-static clean dev feed
 
+# Generate all files (including home page and feed)
 all: sync-static index feed $(HTML_FILES)
 
+# Generate HTML from changed Markdown files
+# (this is run on saving .md files in VSCode)
 changes: sync-static $(HTML_FILES)
 
 sync-static:
@@ -19,20 +22,27 @@ sync-static:
 
 public/%.html: private/content/%.md
 	mkdir -p "$(@D)"
-	# Use the latest script (compile if necessary)
-	cargo run --release page "$<" > "$@"
+	./target/release/page_generator page "$<" > "$@"
 
 dev:
 	browser-sync start --server 'public' --files 'public'
 
+# Clean public dir
 clean:
 	rm -rf public/!(.git)
 
+# Update RSS feed
 feed:
-	cargo run --release feed > public/rss.xml
+	./target/release/page_generator feed > public/rss.xml
 
+# Update home page
 index:
-	cargo run --release index > public/index.html
+	./target/release/page_generator index > public/index.html
 
+# Publish all changes with generic commit message
 publish:
 	./bin/publish.sh "Update"
+
+# Build site generator
+build:
+	cargo build --release
