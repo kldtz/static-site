@@ -84,8 +84,8 @@ struct DefaultTemplate<'a> {
     content: &'a str,
 }
 
-impl DefaultTemplate {
-    fn render(page: &Page, content: &str) -> Result<String, askama::Error> {
+impl DefaultTemplate<'_> {
+    fn render(page: Page, content: &str) -> Result<String, askama::Error> {
         let features = page.config.features.unwrap_or_default();
         DefaultTemplate {
             title: &page.config.title,
@@ -111,15 +111,15 @@ struct TopTemplate<'a> {
     content: &'a str,
 }
 
-impl TopTemplate {
-    fn render(page: &Page, content: &str) -> Result<String> {
+impl TopTemplate<'_> {
+    fn render(page: Page, content: &str) -> Result<String, askama::Error> {
         TopTemplate {
             title: &page.config.title,
             description: &page.config.description,
             link: page.config.link.unwrap_or_default(),
             content,
         }
-            .render()?
+            .render()
     }
 }
 
@@ -134,10 +134,10 @@ fn generate_html(page: Page) -> Result<String> {
 
     Ok(match &page.config.template {
         Some(template) => match &template[..] {
-            "top" => TopTemplate::render(&page, &content)?,
+            "top" => TopTemplate::render(page, &content)?,
             unknown => bail!(SSGError(format!("Unknown template {}", unknown))),
         },
-        _ => DefaultTemplate::render(&page, &content)?,
+        _ => DefaultTemplate::render(page, &content)?,
     })
 }
 
