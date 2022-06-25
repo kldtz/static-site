@@ -22,7 +22,7 @@ sync-static:
 
 public/%.html: private/content/%.md
 	mkdir -p "$(@D)"
-	./target/release/page_generator page "$<" > "$@"
+	ssg page "$<" > "$@"
 
 dev:
 	browser-sync start --server 'public' --files 'public'
@@ -33,11 +33,11 @@ clean:
 
 # Update RSS feed
 feed:
-	./target/release/page_generator feed > public/rss.xml
+	ssg feed > public/rss.xml
 
 # Update home page
 index:
-	./target/release/page_generator index > public/index.html
+	ssg index > public/index.html
 
 # Publish all changes with generic commit message
 publish:

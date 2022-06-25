@@ -123,7 +123,7 @@ fn render_default(page: Page, content: &str) -> Result<String, askama::Error> {
     let features = page.config.features.unwrap_or_default();
     DefaultTemplate {
         title: &page.config.title,
-        language: &page.config.language.unwrap_or_default(),
+        language: &page.config.language.unwrap_or_else(|| "en".to_string()),
         date: &page.config.date.format("%b %e, %Y").to_string(),
         description: &page.config.description,
         mathjax: features.iter().any(|f| f == &Feature::MathJax),
