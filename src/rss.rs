@@ -1,5 +1,6 @@
 //! Generation of RSS feed.
 use askama::Template;
+
 use crate::page::{collect_sorted_configs, PageConfig};
 use crate::SsgResult;
 
@@ -29,15 +30,11 @@ pub fn generate_feed(url: &str, title: &str) -> SsgResult<String> {
         let item = ChannelItem {
             title: &c.title,
             description: &c.description,
-            sub_url: &sub_url,
+            sub_url,
             date: c.date.to_rfc2822(),
         };
         items.push(item);
     }
-    let rss = RssTemplate {
-        title: title,
-        url: url,
-        items: items,
-    }.render()?;
+    let rss = RssTemplate { title, url, items }.render()?;
     Ok(rss)
 }

@@ -37,7 +37,7 @@ impl Page {
         let (start, end) =
             find_config(&content).ok_or(format!("{:?} is missing YAML header.", path))?;
         let yaml = &content[start..end];
-        let config: PageConfig = serde_yaml::from_str(&yaml)?;
+        let config: PageConfig = serde_yaml::from_str(yaml)?;
         // Extract markdown content
         let raw_content = (&content[end + 3..]).to_string();
         let content = preprocess_markdown(path, &raw_content)?;
@@ -50,7 +50,7 @@ fn preprocess_markdown(path: &Path, raw_content: &str) -> SsgResult<String> {
     let mut content = String::new();
     let mut last_offset = 0;
     let static_dir = Path::new("private/static");
-    for cap in IMG.captures_iter(&raw_content) {
+    for cap in IMG.captures_iter(raw_content) {
         let full_match = cap
             .get(0)
             .ok_or("Could not get match for zero capture group!")?;
@@ -59,7 +59,7 @@ fn preprocess_markdown(path: &Path, raw_content: &str) -> SsgResult<String> {
             // construct SVG path specified in src attribute
             let src_str = src.as_str();
             let page_dir = path.parent().ok_or("Path argument has no parent!")?;
-            let svg_path = if src_str.starts_with("/") {
+            let svg_path = if src_str.starts_with('/') {
                 static_dir.join(src_str)
             } else {
                 page_dir.join(src_str)
@@ -134,6 +134,6 @@ fn read_config(path: &Path) -> SsgResult<PageConfig> {
     let (start, end) =
         find_config(&content).ok_or(format!("{:?} is missing YAML header.", path))?;
     let yaml = &content[start..end];
-    let config: PageConfig = serde_yaml::from_str(&yaml)?;
+    let config: PageConfig = serde_yaml::from_str(yaml)?;
     Ok(config)
 }

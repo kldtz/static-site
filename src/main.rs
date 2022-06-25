@@ -53,14 +53,14 @@ fn print_result(result: SsgResult<String>, context: &str) {
 
 fn generate_index_page(index_path: &str) -> SsgResult<String> {
     let path = Path::new(index_path);
-    let mut index = Page::new(&path)?;
+    let mut index = Page::new(path)?;
     index.content = generate_index_content()?;
     generate_html(index)
 }
 
 fn generate_content_page(content_path: &str) -> SsgResult<String> {
     let md = Path::new(content_path);
-    let page = Page::new(&md)?;
+    let page = Page::new(md)?;
     generate_html(page)
 }
 
@@ -102,7 +102,7 @@ fn generate_html(page: Page) -> SsgResult<String> {
             "top" => TopTemplate {
                 title: &page.config.title,
                 description: &page.config.description,
-                link: page.config.link.unwrap_or(Vec::new()),
+                link: page.config.link.unwrap_or_default(),
                 content: &content,
             }
             .render()?,
@@ -113,18 +113,18 @@ fn generate_html(page: Page) -> SsgResult<String> {
     Ok(res)
 }
 
-fn render_default(page: Page, content: &String) -> Result<String, askama::Error> {
-    let features = page.config.features.unwrap_or(Vec::new());
+fn render_default(page: Page, content: &str) -> Result<String, askama::Error> {
+    let features = page.config.features.unwrap_or_default();
     DefaultTemplate {
         title: &page.config.title,
-        language: &page.config.language.unwrap_or("en".to_string()),
+        language: &page.config.language.unwrap_or_default(),
         date: &page.config.date.format("%b %e, %Y").to_string(),
         description: &page.config.description,
         mathjax: features.iter().any(|f| f == &Feature::MathJax),
         highlight: features.iter().any(|f| f == &Feature::Highlight),
-        scripts: page.config.scripts.unwrap_or(Vec::new()),
-        link: page.config.link.unwrap_or(Vec::new()),
-        content: &content,
+        scripts: page.config.scripts.unwrap_or_default(),
+        link: page.config.link.unwrap_or_default(),
+        content,
     }
     .render()
 }
