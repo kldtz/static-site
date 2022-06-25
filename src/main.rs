@@ -1,64 +1,70 @@
 //! Custom static site generator. Turns Markdown into HTML.
-use askama::Template;
-use pulldown_cmark::{html, Options, Parser};
 use std::env;
-use std::error;
+use std::fmt::Display;
 use std::path::Path;
 
-// Type alias for result with custom errors determined at runtime (heap)
-pub type SsgResult<T> = std::result::Result<T, Box<dyn error::Error>>;
+use anyhow::{bail, Context, Result};
+use askama::Template;
+use pulldown_cmark::{html, Options, Parser};
+
+use crate::config::{Config, read_config};
+use crate::index::generate_index_content;
+use crate::page::{Feature, Page};
+use crate::rss::generate_feed;
 
 mod config;
-use crate::config::{read_config};
 mod page;
-use crate::page::{Feature, Page};
 mod rss;
-use crate::rss::generate_feed;
 mod index;
-use crate::index::generate_index_content;
 
-fn main() {
+#[derive(Debug)]
+pub struct SSGError(String);
+
+impl std::error::Error for SSGError {}
+
+impl Display for SSGError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+fn main() -> Result<()> {
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
         panic!("Too few arguments!");
     }
     let config = read_config().expect("Invalid config: website.yaml!");
+    println!("{}", generate_output(config, &args)?);
+    Ok(())
+}
+
+fn generate_output(config: Config, args: &[String]) -> Result<String> {
     let command = &args[1];
-    if command == "feed" {
-        print_result(generate_feed(&config.url, &config.title), "RSS feed");
-    } else if command == "index" {
-        let result = generate_index_page("private/content/index.md");
-        print_result(result, "index page");
-    } else if command == "page" {
-        if args.len() < 3 {
-            eprintln!("Missing Markdown path argument!");
-            std::process::exit(1);
+    match command.as_str() {
+        "feed" => generate_feed(&config.url, &config.title)
+            .context("Could not generate feed!"),
+        "index" => generate_index_page("private/content/index.md")
+            .context("Could not generate index page!"),
+        "page" => {
+            if args.len() < 3 {
+                eprintln!("Missing Markdown path argument!");
+                std::process::exit(1);
+            }
+            generate_content_page(&args[2])
+                .with_context(|| format!("Could not generate page {:?}", &args[2]))
         }
-        let result = generate_content_page(&args[2]);
-        print_result(result, &args[2]);
-    } else {
-        panic!("Unknown command '{}'!", command);
+        _ => bail!(SSGError(format!("Unknown command '{}'!", command)))
     }
 }
 
-fn print_result(result: SsgResult<String>, context: &str) {
-    match result {
-        Ok(html) => println!("{}", html),
-        Err(e) => {
-            eprintln!("Error while generating {}:\n{:?}", context, e);
-            std::process::exit(1)
-        }
-    }
-}
-
-fn generate_index_page(index_path: &str) -> SsgResult<String> {
+fn generate_index_page(index_path: &str) -> Result<String> {
     let path = Path::new(index_path);
     let mut index = Page::new(path)?;
     index.content = generate_index_content()?;
     generate_html(index)
 }
 
-fn generate_content_page(content_path: &str) -> SsgResult<String> {
+fn generate_content_page(content_path: &str) -> Result<String> {
     let md = Path::new(content_path);
     let page = Page::new(md)?;
     generate_html(page)
@@ -88,7 +94,7 @@ struct TopTemplate<'a> {
 }
 
 /// Generates HTML from Page struct.
-fn generate_html(page: Page) -> SsgResult<String> {
+fn generate_html(page: Page) -> Result<String> {
     // Convert markdown to HTML
     let mut options = Options::empty();
     options.insert(Options::ENABLE_TABLES);
@@ -105,7 +111,7 @@ fn generate_html(page: Page) -> SsgResult<String> {
                 link: page.config.link.unwrap_or_default(),
                 content: &content,
             }
-            .render()?,
+                .render()?,
             unknown => panic!("Unknown template {}", unknown),
         },
         None => render_default(page, &content)?,
@@ -126,5 +132,5 @@ fn render_default(page: Page, content: &str) -> Result<String, askama::Error> {
         link: page.config.link.unwrap_or_default(),
         content,
     }
-    .render()
+        .render()
 }

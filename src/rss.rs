@@ -1,8 +1,8 @@
 //! Generation of RSS feed.
+use anyhow::Result;
 use askama::Template;
 
 use crate::page::{collect_sorted_configs, PageConfig};
-use crate::SsgResult;
 
 struct ChannelItem<'a> {
     title: &'a str,
@@ -19,7 +19,7 @@ struct RssTemplate<'a> {
     items: Vec<ChannelItem<'a>>,
 }
 
-pub fn generate_feed(url: &str, title: &str) -> SsgResult<String> {
+pub fn generate_feed(url: &str, title: &str) -> Result<String> {
     let configs: Vec<(PageConfig, String)> = collect_sorted_configs()?;
 
     let mut items: Vec<ChannelItem> = Vec::new();

@@ -1,13 +1,15 @@
 //! Generation of single content page.
+use std::fs;
+use std::path::Path;
+
+use anyhow::Result;
 use chrono::{DateTime, Utc};
 use glob::glob;
 use lazy_static::lazy_static;
 use regex::{Regex, RegexBuilder};
 use serde::Deserialize;
-use std::fs;
-use std::path::Path;
 
-use crate::SsgResult;
+use crate::SSGError;
 
 lazy_static! {
     // Image element with SVG source that should be inlined
@@ -31,11 +33,11 @@ pub struct Page {
 }
 
 impl Page {
-    pub fn new(path: &Path) -> SsgResult<Page> {
+    pub fn new(path: &Path) -> Result<Page> {
         let content = fs::read_to_string(path)?;
         // Extract and parse yaml header
-        let (start, end) =
-            find_config(&content).ok_or(format!("{:?} is missing YAML header.", path))?;
+        let (start, end) = find_config(&content)
+            .ok_or_else(|| SSGError(format!("{:?} is missing YAML header.", path)))?;
         let yaml = &content[start..end];
         let config: PageConfig = serde_yaml::from_str(yaml)?;
         // Extract markdown content
@@ -46,39 +48,39 @@ impl Page {
 }
 
 /// Inlines SVGs for proper colors in dark mode.
-fn preprocess_markdown(path: &Path, raw_content: &str) -> SsgResult<String> {
+fn preprocess_markdown(path: &Path, raw_content: &str) -> Result<String> {
     let mut content = String::new();
     let mut last_offset = 0;
     let static_dir = Path::new("private/static");
     for cap in IMG.captures_iter(raw_content) {
-        let full_match = cap
-            .get(0)
-            .ok_or("Could not get match for zero capture group!")?;
+        // We definitely have 3 capture groups, so unwrap
+        let full_match = cap.get(0).unwrap();
         content.push_str(&raw_content[last_offset..full_match.start()]);
-        if let (Some(replace_ids), Some(src)) = (cap.get(1), cap.get(2)) {
-            // construct SVG path specified in src attribute
-            let src_str = src.as_str();
-            let page_dir = path.parent().ok_or("Path argument has no parent!")?;
-            let svg_path = if src_str.starts_with('/') {
-                static_dir.join(src_str)
-            } else {
-                page_dir.join(src_str)
-            };
-            // read SVG file
-            let svg = fs::read_to_string(svg_path)?;
-            // delete the IDs, they might not be unique after inlining
-            let svg = if replace_ids.as_str() == "true" {
-                ID.replace_all(&svg, "").to_string()
-            } else {
-                svg
-            };
-            // we only inline the SVG (assume there is one per file)
-            let svg_match = SVG
-                .find(&svg)
-                .ok_or(format!("{} does not contain any SVG element.", src_str))?;
-            content.push_str(&svg[svg_match.range()]);
-            last_offset = full_match.end();
+        let replace_ids = cap.get(1).unwrap();
+        let src = cap.get(2).unwrap();
+        // construct SVG path specified in src attribute
+        let src_str = src.as_str();
+        let page_dir = path.parent()
+            .ok_or_else(|| SSGError(format!("Path argument {:?} has no parent!", path)))?;
+        let svg_path = if src_str.starts_with('/') {
+            static_dir.join(src_str)
+        } else {
+            page_dir.join(src_str)
         };
+        // read SVG file
+        let svg = fs::read_to_string(svg_path)?;
+        // delete the IDs, they might not be unique after inlining
+        let svg = if replace_ids.as_str() == "true" {
+            ID.replace_all(&svg, "").to_string()
+        } else {
+            svg
+        };
+        // we only inline the SVG (assume there is one per file)
+        let svg_match = SVG
+            .find(&svg)
+            .ok_or_else(|| SSGError(format!("{} does not contain any SVG element.", src_str)))?;
+        content.push_str(&svg[svg_match.range()]);
+        last_offset = full_match.end();
     }
     content.push_str(&raw_content[last_offset..]);
     Ok(content)
@@ -111,16 +113,16 @@ pub fn find_config(content: &str) -> Option<(usize, usize)> {
     Some((start + 3, end))
 }
 
-pub fn collect_sorted_configs() -> SsgResult<Vec<(PageConfig, String)>> {
+pub fn collect_sorted_configs() -> Result<Vec<(PageConfig, String)>> {
     let mut configs: Vec<(PageConfig, String)> = Vec::new();
     for entry in
-        glob("private/content/posts/**/index.md").expect("Failed to read Markdown index files")
+    glob("private/content/posts/**/index.md").expect("Failed to read Markdown index files")
     {
         let path = entry?;
         let sub_url = path
             .strip_prefix("private/content/posts/")?
             .parent()
-            .ok_or(format!("Error constructing relative path for {:?}", path))?;
+            .ok_or_else(|| SSGError(format!("Error constructing relative path for {:?}", path)))?;
         let config: PageConfig = read_config(&path)?;
         configs.push((config, sub_url.display().to_string()));
     }
@@ -129,10 +131,11 @@ pub fn collect_sorted_configs() -> SsgResult<Vec<(PageConfig, String)>> {
     Ok(configs)
 }
 
-fn read_config(path: &Path) -> SsgResult<PageConfig> {
+fn read_config(path: &Path) -> Result<PageConfig> {
     let content = fs::read_to_string(path)?;
     let (start, end) =
-        find_config(&content).ok_or(format!("{:?} is missing YAML header.", path))?;
+        find_config(&content)
+            .ok_or_else(|| SSGError(format!("{:?} is missing YAML header.", path)))?;
     let yaml = &content[start..end];
     let config: PageConfig = serde_yaml::from_str(yaml)?;
     Ok(config)
