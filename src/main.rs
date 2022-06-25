@@ -33,7 +33,7 @@ fn main() -> Result<()> {
     if args.len() < 2 {
         panic!("Too few arguments!");
     }
-    let config = read_config().expect("Invalid config: website.yaml!");
+    let config = read_config().context("Invalid config: website.yaml!")?;
     println!("{}", generate_output(config, &args)?);
     Ok(())
 }
@@ -84,6 +84,24 @@ struct DefaultTemplate<'a> {
     content: &'a str,
 }
 
+impl DefaultTemplate {
+    fn render(page: &Page, content: &str) -> Result<String, askama::Error> {
+        let features = page.config.features.unwrap_or_default();
+        DefaultTemplate {
+            title: &page.config.title,
+            language: &page.config.language.unwrap_or_else(|| "en".to_string()),
+            date: &page.config.date.format("%b %e, %Y").to_string(),
+            description: &page.config.description,
+            mathjax: features.iter().any(|f| f == &Feature::MathJax),
+            highlight: features.iter().any(|f| f == &Feature::Highlight),
+            scripts: page.config.scripts.unwrap_or_default(),
+            link: page.config.link.unwrap_or_default(),
+            content,
+        }
+            .render()
+    }
+}
+
 #[derive(Template)]
 #[template(path = "top.html", escape = "none")]
 struct TopTemplate<'a> {
@@ -91,6 +109,18 @@ struct TopTemplate<'a> {
     description: &'a Option<String>,
     link: Vec<String>,
     content: &'a str,
+}
+
+impl TopTemplate {
+    fn render(page: &Page, content: &str) -> Result<String> {
+        TopTemplate {
+            title: &page.config.title,
+            description: &page.config.description,
+            link: page.config.link.unwrap_or_default(),
+            content,
+        }
+            .render()?
+    }
 }
 
 /// Generates HTML from Page struct.
@@ -102,35 +132,12 @@ fn generate_html(page: Page) -> Result<String> {
     let mut content = String::new();
     html::push_html(&mut content, parser);
 
-    let res = match &page.config.template {
+    Ok(match &page.config.template {
         Some(template) => match &template[..] {
-            "default" => render_default(page, &content)?,
-            "top" => TopTemplate {
-                title: &page.config.title,
-                description: &page.config.description,
-                link: page.config.link.unwrap_or_default(),
-                content: &content,
-            }
-                .render()?,
-            unknown => panic!("Unknown template {}", unknown),
+            "top" => TopTemplate::render(&page, &content)?,
+            unknown => bail!(SSGError(format!("Unknown template {}", unknown))),
         },
-        None => render_default(page, &content)?,
-    };
-    Ok(res)
+        _ => DefaultTemplate::render(&page, &content)?,
+    })
 }
 
-fn render_default(page: Page, content: &str) -> Result<String, askama::Error> {
-    let features = page.config.features.unwrap_or_default();
-    DefaultTemplate {
-        title: &page.config.title,
-        language: &page.config.language.unwrap_or_else(|| "en".to_string()),
-        date: &page.config.date.format("%b %e, %Y").to_string(),
-        description: &page.config.description,
-        mathjax: features.iter().any(|f| f == &Feature::MathJax),
-        highlight: features.iter().any(|f| f == &Feature::Highlight),
-        scripts: page.config.scripts.unwrap_or_default(),
-        link: page.config.link.unwrap_or_default(),
-        content,
-    }
-        .render()
-}

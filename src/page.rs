@@ -2,7 +2,7 @@
 use std::fs;
 use std::path::Path;
 
-use anyhow::Result;
+use anyhow::{Context, Result};
 use chrono::{DateTime, Utc};
 use glob::glob;
 use lazy_static::lazy_static;
@@ -116,7 +116,7 @@ pub fn find_config(content: &str) -> Option<(usize, usize)> {
 pub fn collect_sorted_configs() -> Result<Vec<(PageConfig, String)>> {
     let mut configs: Vec<(PageConfig, String)> = Vec::new();
     for entry in
-    glob("private/content/posts/**/index.md").expect("Failed to read Markdown index files")
+    glob("private/content/posts/**/index.md").context("Failed to read Markdown index files")?
     {
         let path = entry?;
         let sub_url = path
