@@ -5,6 +5,7 @@ use std::path::Path;
 
 use anyhow::{bail, Context, Result};
 use askama::Template;
+use lazy_static::lazy_static;
 use pulldown_cmark::{html, Options, Parser};
 
 use crate::config::{Config, read_config};
@@ -16,6 +17,11 @@ mod config;
 mod page;
 mod rss;
 mod index;
+
+lazy_static! {
+    // Default language
+    static ref DEFAULT_LANG: String = "en".to_string();
+}
 
 #[derive(Debug)]
 pub struct SSGError(String);
@@ -79,23 +85,26 @@ struct DefaultTemplate<'a> {
     description: &'a Option<String>,
     mathjax: bool,
     highlight: bool,
-    scripts: Vec<String>,
-    link: Vec<String>,
+    scripts: &'a Vec<String>,
+    link: &'a Vec<String>,
     content: &'a str,
 }
 
 impl DefaultTemplate<'_> {
-    fn render(page: Page, content: &str) -> Result<String, askama::Error> {
-        let features = page.config.features.unwrap_or_default();
+    fn render(page: &Page, content: &str) -> Result<String, askama::Error> {
+        let (highlight, mathjax) = match &page.config.features {
+            Some(features) => (features.contains(&Feature::Highlight), features.contains(&Feature::MathJax)),
+            None => (false, false)
+        };
         DefaultTemplate {
             title: &page.config.title,
-            language: &page.config.language.unwrap_or_else(|| "en".to_string()),
+            language: page.config.language.as_ref().unwrap_or(&DEFAULT_LANG),
             date: &page.config.date.format("%b %e, %Y").to_string(),
             description: &page.config.description,
-            mathjax: features.iter().any(|f| f == &Feature::MathJax),
-            highlight: features.iter().any(|f| f == &Feature::Highlight),
-            scripts: page.config.scripts.unwrap_or_default(),
-            link: page.config.link.unwrap_or_default(),
+            mathjax,
+            highlight,
+            scripts: page.config.scripts.as_ref().unwrap_or(&Vec::default()),
+            link: page.config.link.as_ref().unwrap_or(&Vec::default()),
             content,
         }
             .render()
@@ -107,16 +116,16 @@ impl DefaultTemplate<'_> {
 struct TopTemplate<'a> {
     title: &'a str,
     description: &'a Option<String>,
-    link: Vec<String>,
+    link: &'a Vec<String>,
     content: &'a str,
 }
 
 impl TopTemplate<'_> {
-    fn render(page: Page, content: &str) -> Result<String, askama::Error> {
+    fn render(page: &Page, content: &str) -> Result<String, askama::Error> {
         TopTemplate {
             title: &page.config.title,
             description: &page.config.description,
-            link: page.config.link.unwrap_or_default(),
+            link: page.config.link.as_ref().unwrap_or(&Vec::default()),
             content,
         }
             .render()
@@ -134,10 +143,10 @@ fn generate_html(page: Page) -> Result<String> {
 
     Ok(match &page.config.template {
         Some(template) => match &template[..] {
-            "top" => TopTemplate::render(page, &content)?,
+            "top" => TopTemplate::render(&page, &content)?,
             unknown => bail!(SSGError(format!("Unknown template {}", unknown))),
         },
-        _ => DefaultTemplate::render(page, &content)?,
+        _ => DefaultTemplate::render(&page, &content)?,
     })
 }
 
