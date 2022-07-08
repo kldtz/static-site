@@ -37,7 +37,7 @@ feed:
 
 # Update home page
 index:
-	ssg index > public/index.html
+	ssg index > public/posts/index.html
 
 # Publish all changes with generic commit message
 publish:

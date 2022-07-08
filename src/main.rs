@@ -1,4 +1,6 @@
 //! Custom static site generator. Turns Markdown into HTML.
+use crate::page::PageConfig;
+use crate::page::collect_sorted_configs;
 use std::env;
 use std::fmt::Display;
 use std::path::Path;
@@ -49,7 +51,7 @@ fn generate_output(config: Config, args: &[String]) -> Result<String> {
     match command.as_str() {
         "feed" => generate_feed(&config.url, &config.title)
             .context("Could not generate feed!"),
-        "index" => generate_index_page("private/content/index.md")
+        "index" => generate_index_page("private/content/posts/posts.md")
             .context("Could not generate index page!"),
         "page" => {
             if args.len() < 3 {
@@ -132,6 +134,29 @@ impl TopTemplate<'_> {
     }
 }
 
+#[derive(Template)]
+#[template(path = "home.html", escape = "none")]
+struct HomeTemplate<'a> {
+    title: &'a str,
+    description: &'a Option<String>,
+    link: &'a Vec<String>,
+    content: &'a str,
+    configs: &'a Vec<(PageConfig, String)>,
+}
+
+impl HomeTemplate<'_> {
+    fn render(page: &Page, content: &str, configs: &Vec<(PageConfig, String)>) -> Result<String, askama::Error> {
+        HomeTemplate {
+            title: &page.config.title,
+            description: &page.config.description,
+            link: page.config.link.as_ref().unwrap_or(&Vec::default()),
+            content,
+            configs,
+        }
+            .render()
+    }
+}
+
 /// Generates HTML from Page struct.
 fn generate_html(page: Page) -> Result<String> {
     // Convert markdown to HTML
@@ -144,6 +169,10 @@ fn generate_html(page: Page) -> Result<String> {
     Ok(match &page.config.template {
         Some(template) => match &template[..] {
             "top" => TopTemplate::render(&page, &content)?,
+            "home" => {
+                let configs = collect_sorted_configs()?;
+                HomeTemplate::render(&page, &content, &configs)?
+            },
             unknown => bail!(SSGError(format!("Unknown template {}", unknown))),
         },
         _ => DefaultTemplate::render(&page, &content)?,
