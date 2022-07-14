@@ -6,7 +6,7 @@ use anyhow::{Context, Result};
 use chrono::{DateTime, Utc};
 use glob::glob;
 use lazy_static::lazy_static;
-use regex::{Regex, RegexBuilder};
+use regex::{CaptureMatches, Captures, Regex, RegexBuilder};
 use serde::Deserialize;
 
 use crate::SSGError;
@@ -24,6 +24,15 @@ lazy_static! {
         .unwrap();
     // HTML id attribute
     static ref ID: Regex = Regex::new(r#"id=".*?""#).unwrap();
+    // Latex math blocks
+    static ref MATH: Regex = RegexBuilder::new(r#"\$([^$]+?)\$|\$\$([^$]+?)\$\$"#)
+        .dot_matches_new_line(true)
+        .build()
+        .unwrap();
+    static ref KATEX_OPTS: katex::Opts = katex::Opts::builder()
+        .display_mode(true)
+        .build()
+        .unwrap();
 }
 
 /// Page read from YAML header and Markdown content.
@@ -42,44 +51,71 @@ impl Page {
         let config: PageConfig = serde_yaml::from_str(yaml)?;
         // Extract markdown content
         let raw_content = (&content[end + 3..]).to_string();
-        let content = preprocess_markdown(path, &raw_content)?;
+        // Inline SVGs
+        let captures = IMG.captures_iter(&raw_content);
+        let static_dir = Path::new("private/static");
+        let compute_replacement = |cap| replace_svg(cap, static_dir, path);
+        let mut content = replace_all(captures, &raw_content, compute_replacement)?;
+        if let Some(features) = &config.features {
+            if features.contains(&Feature::Katex) {
+                // Render Katex
+                let captures = MATH.captures_iter(&raw_content);
+                content = replace_all(captures, &content, replace_katex)?;
+            }
+        }
         Ok(Page { config, content })
     }
 }
 
-/// Inlines SVGs for proper colors in dark mode.
-fn preprocess_markdown(path: &Path, raw_content: &str) -> Result<String> {
+fn replace_katex(cap: Captures) -> Result<String> {
+    let markup = if cap.get(1).is_some() {
+        cap.get(1)
+    } else {
+        cap.get(2)
+    }.unwrap().as_str();
+    let html = katex::render_with_opts(markup, &*KATEX_OPTS)?;
+    Ok(html)
+}
+
+fn replace_svg(cap: Captures, static_dir: &Path, path: &Path) -> Result<String> {
+    let replace_ids = cap.get(1).unwrap();
+    let src = cap.get(2).unwrap();
+    // construct SVG path specified in src attribute
+    let src_str = src.as_str();
+    let page_dir = path.parent()
+        .ok_or_else(|| SSGError(format!("Path argument {:?} has no parent!", path)))?;
+    let svg_path = if src_str.starts_with('/') {
+        static_dir.join(src_str)
+    } else {
+        page_dir.join(src_str)
+    };
+    // read SVG file
+    let svg = fs::read_to_string(svg_path)?;
+    // delete the IDs, they might not be unique after inlining
+    let svg = if replace_ids.as_str() == "true" {
+        ID.replace_all(&svg, "").to_string()
+    } else {
+        svg
+    };
+    // we only inline the SVG (assume there is one per file)
+    let svg_match = SVG
+        .find(&svg)
+        .ok_or_else(|| SSGError(format!("{} does not contain any SVG element.", src_str)))?;
+    Ok(String::from(&svg[svg_match.range()]))
+}
+
+fn replace_all<'a>(
+    captures: CaptureMatches<'_, 'a>,
+    raw_content: &'a str,
+    compute_replacement: impl Fn(Captures<'a>) -> Result<String>,
+) -> Result<String> {
     let mut content = String::new();
     let mut last_offset = 0;
-    let static_dir = Path::new("private/static");
-    for cap in IMG.captures_iter(raw_content) {
-        // We definitely have 3 capture groups, so unwrap
+    for cap in captures {
         let full_match = cap.get(0).unwrap();
         content.push_str(&raw_content[last_offset..full_match.start()]);
-        let replace_ids = cap.get(1).unwrap();
-        let src = cap.get(2).unwrap();
-        // construct SVG path specified in src attribute
-        let src_str = src.as_str();
-        let page_dir = path.parent()
-            .ok_or_else(|| SSGError(format!("Path argument {:?} has no parent!", path)))?;
-        let svg_path = if src_str.starts_with('/') {
-            static_dir.join(src_str)
-        } else {
-            page_dir.join(src_str)
-        };
-        // read SVG file
-        let svg = fs::read_to_string(svg_path)?;
-        // delete the IDs, they might not be unique after inlining
-        let svg = if replace_ids.as_str() == "true" {
-            ID.replace_all(&svg, "").to_string()
-        } else {
-            svg
-        };
-        // we only inline the SVG (assume there is one per file)
-        let svg_match = SVG
-            .find(&svg)
-            .ok_or_else(|| SSGError(format!("{} does not contain any SVG element.", src_str)))?;
-        content.push_str(&svg[svg_match.range()]);
+        let replacement = compute_replacement(cap)?;
+        content.push_str(&replacement);
         last_offset = full_match.end();
     }
     content.push_str(&raw_content[last_offset..]);
@@ -102,6 +138,7 @@ pub struct PageConfig {
 /// Optional features used by the page.
 #[derive(Deserialize, Debug, PartialEq)]
 pub enum Feature {
+    Katex,
     MathJax,
     Highlight,
 }
