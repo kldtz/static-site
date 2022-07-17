@@ -29,7 +29,11 @@ lazy_static! {
         .dot_matches_new_line(true)
         .build()
         .unwrap();
-    static ref KATEX_OPTS: katex::Opts = katex::Opts::builder()
+    static ref KATEX_OPTS_INLINE: katex::Opts = katex::Opts::builder()
+        .display_mode(false)
+        .build()
+        .unwrap();
+    static ref KATEX_OPTS_BLOCK: katex::Opts = katex::Opts::builder()
         .display_mode(true)
         .build()
         .unwrap();
@@ -68,13 +72,21 @@ impl Page {
 }
 
 fn replace_katex(cap: Captures) -> Result<String> {
-    let markup = if cap.get(1).is_some() {
-        cap.get(1)
+    Ok(if cap.get(1).is_some() {
+        let markup = cap.get(1).unwrap().as_str();
+        let opts = katex::Opts::builder()
+            .display_mode(false)
+            .build()
+            .unwrap();
+        katex::render_with_opts(markup, opts)?
     } else {
-        cap.get(2)
-    }.unwrap().as_str();
-    let html = katex::render_with_opts(markup, &*KATEX_OPTS)?;
-    Ok(html)
+        let markup = cap.get(2).unwrap().as_str();
+        let opts = katex::Opts::builder()
+            .display_mode(true)
+            .build()
+            .unwrap();
+        katex::render_with_opts(markup, opts)?
+    })
 }
 
 fn replace_svg(cap: Captures, static_dir: &Path, path: &Path) -> Result<String> {
