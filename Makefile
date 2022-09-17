@@ -3,7 +3,7 @@ SHELL:=/bin/bash
 MD_FILES = $(shell find private/content/ -type f -name '*.md')
 HTML_FILES = $(patsubst private/content/%.md, public/%.html, $(MD_FILES))
 
-.PHONY: all publish sync-static clean dev feed
+.PHONY: all publish sync-static clean dev feed index publish build touch
 
 # Generate all files (including home page and feed)
 all: sync-static index feed $(HTML_FILES)
@@ -46,3 +46,7 @@ publish:
 # Build site generator
 build:
 	cargo build --release
+
+# Update timestamp of all markdown files
+touch:
+	find private/content/ -type f -name "*.md" -exec touch {} +

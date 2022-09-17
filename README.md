@@ -51,8 +51,8 @@ Templates are compiled, so after changes in templates, run
 cargo install --path .
 ```
 
-Touch the files that are affected by template changes, so `make` picks them up, for example:
+Touch the files that are affected by template changes, so `make` picks them up. To update all Markdown files, run
 
 ```bash
-find private/content/ -type f -name "*.md" -exec touch {} +
+make touch
 ```
