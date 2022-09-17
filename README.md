@@ -42,3 +42,17 @@ make index
 # Publish all changes with generic commit message
 make publish
 ```
+
+### Template changes
+
+Templates are compiled, so after changes in templates, run 
+
+```bash
+cargo install --path .
+```
+
+Touch the files that are affected by template changes, so `make` picks them up, for example:
+
+```bash
+find private/content/ -type f -name "*.md" -exec touch {} +
+```
